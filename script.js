@@ -1,135 +1,91 @@
-// 1. ESTADO DE LA APP (Simulando una base de datos)
-let currentUser = {
-    role: null,
-    name: 'Daniel',
-    booksProgress: [
-        { id: 1, title: 'Fundamentos de Fe', status: 'completado', color: 'bg-blue-600' },
-        { id: 2, title: 'Vida de Oración', status: 'pendiente', color: 'bg-gray-400' }, // Bloqueado hasta que M1 sea corregido
-        { id: 3, title: 'Carácter de Cristo', status: 'bloqueado', color: 'bg-gray-400' },
-    ]
+// script.js mejorado
+let userData = {
+    name: "",
+    phone: "",
+    role: "",
+    maestro: "",
+    isSetupComplete: false
 };
 
-const STUDENTS_FOR_TEACHER = [
-    { id: 1, name: 'Juan Delgado', current: 'Módulo 1', status: 'Necesita Corrección', avatar: 'https://i.pravatar.cc/150?u=1' },
-    { id: 2, name: 'María Castro', current: 'Módulo 1', status: 'Al día', avatar: 'https://i.pravatar.cc/150?u=2' }
+const BOOKS_DATA = [
+    { id: 1, title: 'Libro 1: Fundamentos', chapters: 5, status: 'disponible', color: 'bg-blue-600' },
+    { id: 2, title: 'Libro 2: La Oración', chapters: 4, status: 'bloqueado', color: 'bg-gray-400' },
+    // Agregaremos los 6 libros aquí
 ];
 
-// 2. INICIALIZACIÓN
-document.addEventListener('DOMContentLoaded', () => {
-    setupInputs();
-    renderBooks();
-    renderStudents();
-});
-
-// 3. NAVEGACIÓN MEJORADA
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-    const targetView = document.getElementById(viewId);
-    if (targetView) targetView.classList.remove('hidden');
+    document.getElementById(viewId).classList.remove('hidden');
 }
 
-function selectRole(role) {
-    currentUser.role = role;
-    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
-    document.getElementById(`role-${role}`).classList.add('active');
+function goToProfile() {
+    showView('view-profile-setup');
+}
+
+function setProfileRole(role) {
+    userData.role = role;
+    // Estética de botones
+    document.getElementById('btn-role-alumno').className = role === 'alumno' ? 'p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl font-bold' : 'p-4 border-2 border-gray-100 rounded-2xl font-bold';
+    document.getElementById('btn-role-maestro').className = role === 'maestro' ? 'p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl font-bold' : 'p-4 border-2 border-gray-100 rounded-2xl font-bold';
     
-    const subtitle = document.getElementById('login-subtitle');
-    const teacherCode = document.getElementById('teacher-code-container');
-
-    if (role === 'maestro') {
-        subtitle.innerText = 'VERIFICACIÓN MINISTERIAL';
-        teacherCode.classList.remove('hidden');
-    } else {
-        subtitle.innerText = 'EMPIEZA MI CAMINO';
-        teacherCode.classList.add('hidden');
-    }
+    // Mostrar campos extra
+    document.getElementById('setup-alumno-extra').classList.toggle('hidden', role !== 'alumno');
+    document.getElementById('setup-maestro-extra').classList.toggle('hidden', role !== 'maestro');
 }
 
-function handleLogin() {
-    if (!currentUser.role) {
-        alert("Por favor selecciona un rol para continuar");
+function finishSetup() {
+    const name = document.getElementById('setup-name').value;
+    const phone = document.getElementById('setup-phone').value;
+    
+    if (!name || !phone || !userData.role) {
+        alert("Por favor completa todos los campos obligatorios (*)");
         return;
     }
+
+    if (userData.role === 'maestro') {
+        const code = document.getElementById('maestro-code').value;
+        if (code !== "1234") {
+            alert("Código Ministerial Inválido");
+            return;
+        }
+    } else {
+        const maestro = document.getElementById('select-maestro').value;
+        if (!maestro) {
+            alert("Debes elegir un maestro para que corrija tus tareas");
+            return;
+        }
+    }
+
+    // Guardar datos y entrar
+    userData.name = name;
+    document.getElementById('display-name').innerText = name;
+    document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
     
-    if (currentUser.role === 'alumno') {
-        // Simulamos que el alumno entra a su Home
+    if (userData.role === 'alumno') {
+        renderBooks();
         showView('view-student-home');
     } else {
-        const code = Array.from(document.querySelectorAll('.pin-input')).map(i => i.value).join('');
-        if (code === "1234") { // Código de prueba para el maestro
-            showView('view-teacher-panel');
-        } else {
-            alert("Código Ministerial Incorrecto. Pídeselo a tu administrador.");
-        }
+        alert("¡Bienvenido Maestro! Cargando panel...");
+        // Aquí iría el panel de maestro
     }
 }
 
-// 4. RENDERIZADO DE LÓGICA DE NEGOCIO (Libros)
 function renderBooks() {
     const container = document.getElementById('books-container');
-    if(!container) return;
-
-    container.innerHTML = currentUser.booksProgress.map(book => {
-        const isLocked = book.status === 'bloqueado' || book.status === 'pendiente';
-        return `
-        <div onclick="${isLocked ? `alert('Este libro estará disponible cuando el maestro corrija el anterior')` : `openBook('${book.title}')`}" 
-             class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-50 flex transition-all active:scale-95 ${isLocked ? 'opacity-50 grayscale' : 'cursor-pointer hover:border-ministerial-blue'}">
-            <div class="w-24 ${isLocked ? 'bg-gray-300' : book.color} flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-3xl">${isLocked ? 'lock' : 'menu_book'}</span>
+    container.innerHTML = BOOKS_DATA.map(book => `
+        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 ${book.status === 'bloqueado' ? 'opacity-50' : ''}">
+            <div class="w-14 h-14 ${book.color} rounded-2xl flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">${book.status === 'bloqueado' ? 'lock' : 'book'}</span>
             </div>
-            <div class="flex-1 p-5">
-                <h4 class="font-bold text-gray-900">${book.title}</h4>
-                <p class="text-[10px] ${isLocked ? 'text-orange-500' : 'text-emerald-500'} font-bold uppercase mt-1">
-                    ${book.status.toUpperCase()}
-                </p>
-            </div>
-        </div>
-    `}).join('');
-}
-
-function renderStudents() {
-    const container = document.getElementById('students-list');
-    if(!container) return;
-
-    container.innerHTML = STUDENTS_FOR_TEACHER.map(st => `
-        <div class="student-row flex items-center gap-4 bg-white p-4 rounded-3xl shadow-sm border border-gray-50 active:scale-95 transition-all cursor-pointer">
-            <img src="${st.avatar}" class="w-12 h-12 rounded-full border-2 border-ministerial-gold shadow-sm">
             <div class="flex-1">
-                <h5 class="font-bold text-sm text-gray-900">${st.name}</h5>
-                <p class="text-[10px] text-gray-400 font-bold">${st.current}</p>
+                <h4 class="font-bold text-gray-900">${book.title}</h4>
+                <p class="text-xs text-gray-400">${book.chapters} Capítulos</p>
             </div>
-            <span class="text-[9px] font-bold px-2 py-1 rounded-full ${st.status === 'Al día' ? 'bg-emerald-100 text-emerald-600' : 'bg-orange-100 text-orange-600'}">
-                ${st.status}
-            </span>
+            <span class="material-symbols-outlined text-gray-300">chevron_right</span>
         </div>
     `).join('');
 }
 
-// 5. ACCIONES
-function openBook(title) {
-    document.getElementById('chapter-title').innerText = title;
-    showView('view-chapter');
-}
-
-function submitLesson() {
-    // Aquí simulamos el envío que me comentaste
-    alert("¡Tarea enviada! Ahora el libro quedará en revisión hasta que tu maestro lo apruebe.");
-    showView('view-student-home');
-}
-
 function logout() {
-    showView('view-login');
-    document.querySelectorAll('.pin-input').forEach(i => i.value = '');
-    currentUser.role = null;
-}
-
-function setupInputs() {
-    const inputs = document.querySelectorAll('.pin-input');
-    inputs.forEach((input, index) => {
-        input.addEventListener('keyup', (e) => {
-            if (e.target.value.length === 1 && index < inputs.length - 1) {
-                inputs[index + 1].focus();
-            }
-        });
-    });
+    location.reload(); // Reinicia la app para el ejemplo
 }
