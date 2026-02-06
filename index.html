@@ -18,65 +18,71 @@
         nav { width: 100%; height: 75px; background: white; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
         .hidden { display: none !important; }
         .active-role { border-color: #2563eb !important; background-color: #eff6ff !important; color: #2563eb !important; }
+        .avatar-circle { width: 80px; height: 80px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px border-dashed #cbd5e1; position: relative; }
     </style>
 </head>
 <body>
     <div id="app-viewport">
         <section id="view-auth" class="view p-8 flex flex-col items-center justify-center space-y-6">
             <span class="material-symbols-outlined text-blue-600 text-6xl">auto_stories</span>
-            <div class="text-center">
-                <h1 class="text-2xl font-bold italic">Caminando con Cristo</h1>
-                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Escuela de Formación</p>
-            </div>
+            <h1 class="text-2xl font-bold italic">Caminando con Cristo</h1>
+            
             <div class="w-full space-y-3">
-                <input type="email" id="auth-email" placeholder="Correo electrónico" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
-                <button onclick="goToProfile()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-transform">Entrar</button>
+                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 border border-gray-200 py-3 rounded-2xl font-semibold text-xs hover:bg-gray-50">
+                    <img src="https://www.google.com/favicon.ico" class="w-4"> Continuar con Google
+                </button>
+                <div class="flex items-center gap-2 py-2">
+                    <div class="flex-1 h-[1px] bg-gray-100"></div>
+                    <span class="text-[10px] text-gray-400 font-bold uppercase">o usa tu correo</span>
+                    <div class="flex-1 h-[1px] bg-gray-100"></div>
+                </div>
+                <input type="email" id="auth-email" placeholder="Correo" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
+                <input type="password" id="auth-pass" placeholder="Contraseña" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
+                <button onclick="goToProfile()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Entrar / Registrarse</button>
             </div>
         </section>
 
         <section id="view-profile-setup" class="view hidden p-8">
-            <div class="flex items-center gap-4 mb-6">
-                <button onclick="showView('view-auth')"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h2 class="text-xl font-bold">Tu Perfil</h2>
-            </div>
+            <h2 class="text-xl font-bold mb-6">Configura tu Perfil</h2>
             <div class="scroll-area space-y-4">
+                <div class="flex flex-col items-center mb-2">
+                    <div id="setup-avatar-preview" class="avatar-circle">
+                        <span class="material-symbols-outlined text-gray-300 text-4xl">person</span>
+                    </div>
+                    <label class="text-blue-600 text-[10px] font-bold mt-2 cursor-pointer uppercase tracking-widest">
+                        Subir Foto
+                        <input type="file" id="input-photo-setup" accept="image/*" class="hidden" onchange="previewImage(this, 'setup-avatar-preview')">
+                    </label>
+                </div>
                 <input type="text" id="setup-name" placeholder="Nombre Completo" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
-                <input type="tel" id="setup-phone" placeholder="Número de WhatsApp" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
-                
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2">Selecciona tu rol</p>
+                <input type="tel" id="setup-phone" placeholder="WhatsApp" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="setRole('alumno')" id="role-alumno" class="p-4 border rounded-2xl text-xs font-bold text-gray-400">Alumno</button>
                     <button onclick="setRole('maestro')" id="role-maestro" class="p-4 border rounded-2xl text-xs font-bold text-gray-400">Maestro</button>
                 </div>
-
-                <div id="extra-alumno" class="hidden space-y-2">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2">Asignar Maestro</p>
+                <div id="extra-alumno" class="hidden">
                     <select id="select-maestro" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-gray-100 text-sm">
                         <option value="">Selecciona tu maestro...</option>
                         <option value="Pastor Juan">Pastor Juan Carlos</option>
-                        <option value="Maestra Maria">Maestra María</option>
                     </select>
                 </div>
-
-                <div id="extra-maestro" class="hidden space-y-2">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2">Código de Maestro</p>
-                    <input type="password" id="maestro-code" placeholder="Código de seguridad" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border border-blue-100 text-sm">
+                <div id="extra-maestro" class="hidden">
+                    <input type="password" id="maestro-code" placeholder="Código de Maestro (1234)" class="w-full bg-gray-50 p-4 rounded-2xl border border-blue-100 text-sm">
                 </div>
-
-                <button onclick="finishSetup()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl mt-4">Comenzar formación</button>
+                <button onclick="finishSetup()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl mt-4">Comenzar</button>
             </div>
         </section>
 
         <section id="view-student-home" class="view hidden">
             <header class="p-6 flex justify-between items-center border-b bg-white">
                 <div class="flex items-center gap-2">
-                    <div id="user-avatar-home" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm"></div>
+                    <div id="user-avatar-home" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold overflow-hidden"></div>
                     <div>
                         <p id="display-name" class="font-bold text-sm"></p>
                         <p id="display-role" class="text-[8px] text-gray-400 font-bold uppercase"></p>
                     </div>
                 </div>
-                <button onclick="showView('view-user-details')" class="text-gray-400"><span class="material-symbols-outlined">settings</span></button>
+                <button onclick="showView('view-user-details')"><span class="material-symbols-outlined text-gray-400">settings</span></button>
             </header>
             <div id="books-container" class="scroll-area p-6 space-y-4"></div>
             <nav>
@@ -87,18 +93,18 @@
         </section>
 
         <section id="view-community" class="view hidden">
-            <header class="p-6 bg-white border-b">
-                <div class="flex items-center gap-4 mb-4">
+            <header class="p-6 bg-white border-b sticky top-0">
+                <div class="flex items-center gap-4 mb-2">
                     <button onclick="showView('view-student-home')"><span class="material-symbols-outlined">arrow_back</span></button>
-                    <h2 class="text-xl font-bold text-gray-800">Comunidad</h2>
+                    <h2 class="text-xl font-bold">Comunidad</h2>
                 </div>
                 <div class="bg-gray-100 px-4 py-2 rounded-2xl flex items-center">
                     <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
-                    <input type="text" id="search-input" onkeyup="filterForum()" placeholder="Buscar consulta..." class="bg-transparent ml-2 w-full outline-none text-sm">
+                    <input type="text" id="search-input" onkeyup="filterForum()" placeholder="Buscar..." class="bg-transparent ml-2 w-full outline-none text-sm">
                 </div>
             </header>
             <div id="forum-container" class="scroll-area p-6 space-y-4"></div>
-            <button id="btn-floating" onclick="openModal('modal-question')" class="bg-blue-600 text-white shadow-lg"><span class="material-symbols-outlined">add_comment</span></button>
+            <button id="btn-floating" onclick="openModal('modal-question')" class="bg-blue-600 text-white"><span class="material-symbols-outlined">add_comment</span></button>
             <nav>
                 <button onclick="showView('view-student-home')" class="text-gray-300"><span class="material-symbols-outlined">home</span></button>
                 <button onclick="showView('view-community')" class="text-blue-600"><span class="material-symbols-outlined">groups</span></button>
@@ -107,18 +113,30 @@
         </section>
 
         <section id="view-user-details" class="view hidden">
-            <header class="p-6 border-b flex items-center gap-4">
+            <header class="p-6 flex items-center gap-4 border-b">
                 <button onclick="showView('view-student-home')"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h2 class="font-bold">Mi Cuenta</h2>
+                <h2 class="font-bold">Ajustes de Perfil</h2>
             </header>
-            <div class="scroll-area p-8 text-center">
-                <div id="profile-img-detail" class="w-24 h-24 bg-blue-600 rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold mb-4 shadow-xl"></div>
-                <h3 id="detail-name" class="text-xl font-bold text-gray-800"></h3>
-                <div class="mt-6 space-y-3">
-                    <div class="bg-gray-50 p-4 rounded-2xl flex justify-between"><span class="text-gray-400 text-xs font-bold uppercase">WhatsApp</span><span id="detail-phone" class="text-xs font-bold"></span></div>
-                    <div class="bg-gray-50 p-4 rounded-2xl flex justify-between"><span class="text-gray-400 text-xs font-bold uppercase">Rol</span><span id="detail-role" class="text-xs font-bold text-blue-600 uppercase"></span></div>
+            <div class="scroll-area p-8 space-y-6">
+                <div class="flex flex-col items-center">
+                    <div id="detail-avatar-preview" class="avatar-circle"></div>
+                    <label class="text-blue-600 text-[10px] font-bold mt-2 cursor-pointer uppercase">
+                        Cambiar Foto
+                        <input type="file" id="input-photo-detail" accept="image/*" class="hidden" onchange="previewImage(this, 'detail-avatar-preview')">
+                    </label>
                 </div>
-                <button onclick="location.reload()" class="w-full py-4 text-red-500 font-bold mt-10 text-sm">Cerrar Sesión</button>
+                <div class="space-y-3">
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase">Nombre</p>
+                        <input type="text" id="edit-name" class="w-full bg-transparent font-bold text-sm outline-none">
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase">WhatsApp</p>
+                        <input type="tel" id="edit-phone" class="w-full bg-transparent font-bold text-sm outline-none">
+                    </div>
+                </div>
+                <button onclick="saveProfileChanges()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Guardar Cambios</button>
+                <button onclick="location.reload()" class="w-full py-4 text-red-500 font-bold text-xs">Cerrar Sesión</button>
             </div>
         </section>
 
@@ -127,24 +145,24 @@
                 <button onclick="showView('view-student-home')"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 id="chapter-title" class="font-bold text-sm"></h2>
             </header>
-            <div class="scroll-area p-8 space-y-6">
-                <div class="p-6 bg-blue-50 rounded-3xl border border-blue-100">
-                    <h3 class="text-lg font-bold text-blue-800">Lección 1: Introducción</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed mt-2">Bienvenido a tu primer paso en este camino ministerial...</p>
+            <div class="scroll-area p-8 space-y-4">
+                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                    <h3 class="font-bold text-blue-800">Lección 1</h3>
+                    <p class="text-sm text-gray-600 mt-2">Contenido ministerial cargando...</p>
                 </div>
-                <textarea class="w-full bg-gray-50 p-4 rounded-2xl h-40 outline-none text-sm border border-gray-100" placeholder="Escribe tu reflexión para el maestro..."></textarea>
-                <button onclick="alert('¡Tarea enviada!')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Entregar Lección</button>
+                <textarea class="w-full bg-gray-50 p-4 rounded-xl h-32 outline-none" placeholder="Tu reflexión..."></textarea>
+                <button onclick="alert('¡Tarea enviada!')" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold">Enviar al Maestro</button>
             </div>
         </section>
 
         <div id="modal-question" class="hidden">
             <div class="modal-content">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold">Nueva Consulta</h3>
                     <button onclick="closeModal('modal-question')"><span class="material-symbols-outlined">close</span></button>
                 </div>
-                <textarea id="new-question-text" class="w-full bg-gray-100 p-4 rounded-2xl h-32 outline-none text-sm" placeholder="Escribe tu duda aquí..."></textarea>
-                <button onclick="postQuestion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold mt-4">Publicar Muro</button>
+                <textarea id="new-question-text" class="w-full bg-gray-50 border p-4 rounded-2xl h-32 outline-none text-sm" placeholder="Escribe aquí..."></textarea>
+                <button onclick="postQuestion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold mt-4">Publicar</button>
             </div>
         </div>
     </div>
