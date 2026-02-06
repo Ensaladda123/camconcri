@@ -6,12 +6,11 @@
     <title>Caminando con Cristo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Lexend', sans-serif; background-color: #f3f4f6; }
         .view { min-height: 100vh; background: white; display: flex; flex-direction: column; width: 100%; position: relative; }
         .hidden { display: none !important; }
-        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
         input[type="file"] { display: none; }
         .scroll-hide::-webkit-scrollbar { display: none; }
     </style>
@@ -23,20 +22,18 @@
         <section id="view-auth" class="view p-8 flex flex-col justify-center items-center">
             <div class="mb-8 text-center">
                 <span class="material-symbols-outlined text-blue-600 text-7xl">account_circle</span>
-                <h1 class="text-2xl font-bold mt-2 text-gray-800">Crear Cuenta</h1>
+                <h1 class="text-2xl font-bold mt-2 text-gray-800">Bienvenido</h1>
+                <p class="text-gray-400 text-sm">Ingresa tus datos para comenzar</p>
             </div>
             <div class="w-full space-y-4">
-                <input type="email" id="input-email" placeholder="Email" class="w-full bg-blue-50/50 border p-4 rounded-xl outline-none">
-                <input type="password" id="input-password" placeholder="Contraseña" class="w-full bg-blue-50/50 border p-4 rounded-xl outline-none">
-                <button onclick="validarRegistro()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg">Registrarse</button>
+                <input type="email" id="input-email" placeholder="Email" class="w-full bg-blue-50/50 border p-4 rounded-xl outline-none focus:border-blue-500">
+                <input type="password" id="input-password" placeholder="Contraseña" class="w-full bg-blue-50/50 border p-4 rounded-xl outline-none focus:border-blue-500">
+                <button onclick="validarRegistro()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg">Siguiente</button>
             </div>
         </section>
 
         <section id="view-setup" class="view hidden p-8 flex flex-col">
-            <div class="flex items-center mb-6">
-                <button onclick="cambiarVista('view-auth')" class="text-gray-400 mr-2"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h2 class="text-xl font-bold text-gray-800">Tu Perfil</h2>
-            </div>
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Completa tu perfil</h2>
             <div class="flex flex-col items-center mb-6">
                 <label for="file-upload" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed overflow-hidden cursor-pointer" id="avatar-preview">
                     <span class="material-symbols-outlined text-gray-400">add_a_photo</span>
@@ -44,25 +41,23 @@
                 <input id="file-upload" type="file" accept="image/*" onchange="cargarFoto(event)">
             </div>
             <div class="space-y-4 overflow-y-auto scroll-hide">
-                <input type="text" id="setup-name" placeholder="Nombre completo" class="w-full border p-4 rounded-xl">
-                <input type="tel" id="setup-phone" placeholder="WhatsApp" class="w-full border p-4 rounded-xl">
+                <input type="text" id="setup-name" placeholder="Tu nombre" class="w-full border p-4 rounded-xl outline-none">
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="elegirRol('alumno')" id="btn-alumno" class="border-2 p-4 rounded-xl font-bold text-gray-400">Alumno</button>
                     <button onclick="elegirRol('maestro')" id="btn-maestro" class="border-2 p-4 rounded-xl font-bold text-gray-400">Maestro</button>
                 </div>
-                <div id="opcion-alumno" class="hidden"><select id="select-maestro" class="w-full p-4 bg-blue-50 rounded-xl outline-none"><option value="">Maestro asignado...</option><option>Pastor Juan</option></select></div>
-                <div id="opcion-maestro" class="hidden"><input type="password" id="input-codigo" placeholder="Código (123)" class="w-full p-4 bg-orange-50 rounded-xl outline-none"></div>
+                <div id="opcion-maestro" class="hidden"><input type="password" id="input-codigo" placeholder="Código Maestro (123)" class="w-full p-4 bg-orange-50 rounded-xl border border-orange-100 outline-none"></div>
             </div>
-            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold mt-auto shadow-lg">Confirmar</button>
+            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold mt-auto">Entrar a la App</button>
         </section>
 
         <section id="view-home-alumno" class="view hidden">
-            <header class="p-6 border-b flex justify-between items-center bg-white">
+            <header class="p-6 border-b flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div id="av-al" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold"></div>
+                    <div id="av-al" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold overflow-hidden"></div>
                     <p id="nm-al" class="font-bold text-sm"></p>
                 </div>
-                <button onclick="cerrarSesion()" class="text-gray-300"><span class="material-symbols-outlined">logout</span></button>
+                <button onclick="cerrarSesion()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></button>
             </header>
             <div class="p-6 flex-1 overflow-y-auto pb-24 scroll-hide">
                 <h3 class="font-bold text-xl mb-6">Mis Libros</h3>
@@ -71,117 +66,47 @@
             <nav id="nav-alumno" class="absolute bottom-0 w-full h-20 bg-white border-t flex justify-around items-center"></nav>
         </section>
 
-        <section id="view-capitulos" class="view hidden">
-            <header class="p-6 border-b flex items-center bg-white">
-                <button onclick="cambiarVista('view-home-alumno')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h3 id="cap-lib-titulo" class="font-bold text-lg text-gray-800 truncate">Capítulos</h3>
-            </header>
-            <div id="lista-caps" class="p-6 space-y-3 overflow-y-auto flex-1"></div>
-        </section>
-
-        <section id="view-devocional" class="view hidden">
-            <header class="p-6 border-b flex items-center bg-white sticky top-0 z-10">
-                <button onclick="cambiarVista('view-capitulos')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h3 id="dev-titulo" class="font-bold text-sm text-gray-700">Lección</h3>
-            </header>
-            <div class="p-6 overflow-y-auto flex-1 pb-10">
-                <div class="bg-blue-50 p-6 rounded-3xl mb-8 border border-blue-100">
-                    <h4 class="font-bold text-blue-800 mb-2">Devocional</h4>
-                    <p class="text-gray-600 text-sm italic">"Porque de tal manera amó Dios al mundo..." (Juan 3:16)</p>
-                </div>
-                <div>
-                    <label class="font-bold text-sm text-gray-800 block mb-2">1. ¿Qué comprendes de este pasaje?</label>
-                    <textarea class="w-full bg-gray-50 border p-4 rounded-2xl h-24 outline-none text-sm" placeholder="Responde aquí..."></textarea>
-                </div>
-                <button onclick="alert('Enviado a corrección.')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold mt-10 shadow-lg">Enviar a mi Maestro</button>
-            </div>
-        </section>
-
         <section id="view-home-maestro" class="view hidden">
             <header class="p-6 border-b flex justify-between items-center bg-gray-50">
                 <div class="flex items-center gap-3">
-                    <div id="av-ma" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                    <div id="av-ma" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold overflow-hidden"></div>
                     <p id="nm-ma" class="font-bold text-sm"></p>
                 </div>
-                <button onclick="cerrarSesion()" class="text-gray-300"><span class="material-symbols-outlined">logout</span></button>
+                <button onclick="cerrarSesion()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></button>
             </header>
-            <div class="p-6 flex-1 overflow-y-auto pb-24 scroll-hide">
-                <h3 class="font-bold text-xl mb-4 text-gray-800">Mi Nómina</h3>
-                <div class="bg-white p-4 rounded-2xl border flex items-center justify-between card-shadow">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 font-bold">M</div>
-                        <div>
-                            <p class="font-bold text-sm text-gray-700">Martin Moreno</p>
-                            <p class="text-[10px] text-orange-500 font-bold uppercase">Pendiente</p>
-                        </div>
-                    </div>
-                    <button onclick="cambiarVista('view-corregir')" class="bg-blue-600 text-white text-[10px] px-3 py-2 rounded-lg font-bold">CORREGIR</button>
-                </div>
+            <div class="p-6 flex-1 overflow-y-auto pb-24 scroll-hide text-center">
+                <h3 class="font-bold text-xl mb-4 text-left">Nómina</h3>
+                <p class="text-gray-400 mt-10">No hay alumnos pendientes aún.</p>
             </div>
             <nav id="nav-maestro" class="absolute bottom-0 w-full h-20 bg-white border-t flex justify-around items-center"></nav>
-        </section>
-
-        <section id="view-corregir" class="view hidden">
-            <header class="p-6 border-b flex items-center bg-white sticky top-0 z-10">
-                <button onclick="cambiarVista('view-home-maestro')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <div><h3 class="font-bold text-sm uppercase">Martin Moreno</h3><p class="text-[10px] text-blue-600 font-bold">LIBRO 1 - CAPÍTULO 1</p></div>
-            </header>
-            <div class="p-6 overflow-y-auto flex-1 pb-10 scroll-hide">
-                <div class="mb-8 p-4 bg-gray-50 rounded-3xl border border-gray-100">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Pregunta 1</p>
-                    <p class="text-sm font-bold text-gray-700 mb-4">¿Qué comprendes de este pasaje?</p>
-                    <div class="bg-white p-4 rounded-2xl text-sm italic text-gray-600 border mb-4">"Entiendo que el amor de Dios es infinito..."</div>
-                    <div class="flex gap-3">
-                        <button onclick="marcarPregunta(1, true)" id="btn-check-1" class="flex-1 py-3 rounded-2xl border-2 border-gray-100 text-gray-300 flex justify-center"><span class="material-symbols-outlined">check_circle</span></button>
-                        <button onclick="marcarPregunta(1, false)" id="btn-x-1" class="flex-1 py-3 rounded-2xl border-2 border-gray-100 text-gray-300 flex justify-center"><span class="material-symbols-outlined">cancel</span></button>
-                    </div>
-                    <textarea id="feedback-1" class="hidden w-full mt-4 p-4 bg-orange-50 border border-orange-100 rounded-2xl text-xs outline-none" placeholder="Orientación..."></textarea>
-                </div>
-                <button onclick="finalizarCorreccion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Guardar y Finalizar</button>
-            </div>
-        </section>
-
-        <section id="view-comunidad" class="view hidden">
-            <header class="p-6 border-b flex items-center"><button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button><h3 class="font-bold text-lg">Comunidad</h3></header>
-            <div class="p-12 text-center text-gray-400"><span class="material-symbols-outlined text-6xl opacity-20">forum</span><p class="mt-4">Pronto...</p></div>
-        </section>
-
-        <section id="view-perfil" class="view hidden">
-            <header class="p-6 border-b flex items-center"><button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button><h3 class="font-bold text-lg">Mi Perfil</h3></header>
-            <div id="perfil-body" class="p-8 flex flex-col items-center">
-                <div id="perf-av" class="w-24 h-24 bg-gray-200 rounded-full mb-4 flex items-center justify-center text-white text-3xl font-bold overflow-hidden"></div>
-                <h4 id="perf-name" class="font-bold text-xl uppercase text-center"></h4>
-                <p id="perf-rol" class="text-blue-600 font-bold text-xs uppercase bg-blue-50 px-3 py-1 rounded-full mt-2"></p>
-                <button onclick="cerrarSesion()" class="mt-12 text-red-500 font-bold border border-red-100 px-6 py-2 rounded-xl">Cerrar Sesión</button>
-            </div>
         </section>
 
     </div>
 
     <script>
-        // OBJETO GLOBAL (IMPORTANTE PARA QUE NO SE CONGELE)
-        let u = JSON.parse(localStorage.getItem('user_biblico_final')) || { email: "", rol: "", nombre: "", foto: null };
+        // VARIABLE GLOBAL LIMPIA
+        let u = { email: "", rol: "", nombre: "", foto: null };
 
         function cambiarVista(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
+            const views = document.querySelectorAll('.view');
+            views.forEach(v => v.classList.add('hidden'));
+            const target = document.getElementById(id);
+            if(target) target.classList.remove('hidden');
         }
 
-        function volverNav() { cambiarVista(u.rol === 'alumno' ? 'view-home-alumno' : 'view-home-maestro'); }
-
-        // ESTA FUNCIÓN FUE LA QUE FALLÓ: AHORA GUARDA EL EMAIL ANTES DE SEGUIR
-        function validarRegistro() { 
-            const m = document.getElementById('input-email').value;
-            if(!m) return alert("Email vacío");
-            u.email = m; 
-            cambiarVista('view-setup'); 
+        function validarRegistro() {
+            const email = document.getElementById('input-email').value;
+            const pass = document.getElementById('input-password').value;
+            if(!email || !pass) return alert("Completa los datos");
+            u.email = email;
+            cambiarVista('view-setup');
         }
 
         function cargarFoto(e) {
             const fr = new FileReader();
             fr.onload = () => {
                 u.foto = fr.result;
-                document.getElementById('avatar-preview').innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`;
+                document.getElementById('avatar-preview').innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover">`;
             };
             fr.readAsDataURL(e.target.files[0]);
         }
@@ -190,5 +115,72 @@
             u.rol = r;
             document.getElementById('btn-alumno').className = `border-2 p-4 rounded-xl font-bold transition-all ${r==='alumno'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
             document.getElementById('btn-maestro').className = `border-2 p-4 rounded-xl font-bold transition-all ${r==='maestro'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
-            document.getElementById('opcion-alumno').classList.toggle('hidden', r !== 'alumno');
-            document.getElementById('opcion-maestro').classList.toggle('hidden', r !== 'ma
+            document.getElementById('opcion-maestro').classList.toggle('hidden', r !== 'maestro');
+        }
+
+        function guardarPerfil() {
+            const n = document.getElementById('setup-name').value;
+            if(!n || !u.rol) return alert("Completa el nombre y el rol");
+            if(u.rol === 'maestro' && document.getElementById('input-codigo').value !== '123') return alert("Código incorrecto");
+            
+            u.nombre = n;
+            localStorage.setItem('db_biblica_v3', JSON.stringify(u));
+            iniciarApp();
+        }
+
+        function iniciarApp() {
+            const data = localStorage.getItem('db_biblica_v3');
+            if(!data) {
+                cambiarVista('view-auth');
+                return;
+            }
+            u = JSON.parse(data);
+
+            if(u.rol === 'alumno') {
+                document.getElementById('nm-al').innerText = u.nombre;
+                const av = document.getElementById('av-al');
+                if(u.foto) av.innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover">`;
+                else av.innerText = u.nombre[0].toUpperCase();
+                renderLibros();
+                renderNav('nav-alumno');
+                cambiarVista('view-home-alumno');
+            } else {
+                document.getElementById('nm-ma').innerText = u.nombre;
+                const av = document.getElementById('av-ma');
+                if(u.foto) av.innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover">`;
+                else av.innerText = u.nombre[0].toUpperCase();
+                renderNav('nav-maestro');
+                cambiarVista('view-home-maestro');
+            }
+        }
+
+        function renderNav(id) {
+            const nav = document.getElementById(id);
+            nav.innerHTML = `
+                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-bold">Inicio</span></button>
+                <button class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Perfil</span></button>
+            `;
+        }
+
+        function renderLibros() {
+            const container = document.getElementById('lista-libros');
+            const libros = ["Libro 1: Fundamentos", "Libro 2: Vida de Oración", "Libro 3: Carácter"];
+            container.innerHTML = libros.map((l, i) => `
+                <div class="bg-white p-4 rounded-3xl border flex items-center gap-4 ${i>0?'opacity-40':''}">
+                    <div class="w-12 h-12 ${i==0?'bg-blue-600':'bg-gray-200'} rounded-2xl flex items-center justify-center text-white font-bold">${i+1}</div>
+                    <div class="flex-1"><h4 class="font-bold text-gray-800 text-sm">${l}</h4><p class="text-[10px] text-gray-400 font-bold uppercase">Capítulos disponibles</p></div>
+                </div>
+            `).join('');
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // AUTO-EJECUTAR AL CARGAR
+        window.onload = iniciarApp;
+    </script>
+</body>
+</html>
