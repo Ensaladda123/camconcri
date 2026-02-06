@@ -2,210 +2,95 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caminando con Cristo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <style>
-        body { font-family: 'Lexend', sans-serif; margin: 0; background-color: #f3f4f6; display: flex; justify-content: center; }
-        #app-viewport { width: 100%; max-width: 414px; height: 100vh; position: relative; background: white; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.1); }
-        .view { width: 100%; height: 100%; display: flex; flex-direction: column; position: absolute; top: 0; left: 0; background: white; z-index: 10; }
-        .scroll-area { flex: 1; overflow-y: auto; padding-bottom: 90px; }
-        .hidden { display: none !important; }
-        
-        /* Nav Inferior Fijo */
-        nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: white; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
-        nav button { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #94a3b8; border: none; background: none; cursor: pointer; }
-        nav button.active { color: #2563eb; }
-        nav b { font-size: 10px; text-transform: uppercase; }
-
-        input, select { border: 1px solid #e5e7eb !important; border-radius: 16px !important; padding: 14px !important; outline: none; width: 100%; }
-        .role-card { border: 2px solid #f3f4f6; border-radius: 20px; padding: 16px; text-align: center; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .role-card.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-    <div id="app-viewport">
+<body class="bg-gray-200 font-['Lexend'] antialiased">
+    <div id="app-container" class="mx-auto max-w-md min-h-screen bg-white shadow-2xl overflow-hidden flex flex-col relative">
         
-        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center space-y-6">
-            <div class="text-center mb-4">
-                <span class="material-symbols-outlined text-blue-600 text-7xl">auto_stories</span>
-                <h1 class="text-3xl font-bold italic mt-2">Caminando con Cristo</h1>
+        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center min-h-screen space-y-8">
+            <div class="text-center">
+                <span class="material-symbols-outlined text-blue-600 text-6xl">account_circle</span>
+                <h1 class="text-2xl font-bold mt-4">Crear Cuenta</h1>
+                <p class="text-gray-500 text-sm">Únete a la comunidad espiritual</p>
             </div>
-
-            <div class="w-full space-y-3">
-                <button onclick="loginSocial('Google')" class="w-full flex items-center justify-center gap-3 border border-gray-200 py-4 rounded-2xl font-bold text-sm">
+            
+            <div class="w-full space-y-4">
+                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 border-2 border-gray-100 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all">
                     <img src="https://www.google.com/favicon.ico" class="w-5"> Continuar con Google
                 </button>
-                <button onclick="loginSocial('Apple')" class="w-full flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-bold text-sm">
+                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-bold">
                     <span class="material-symbols-outlined">apple</span> Continuar con Apple
                 </button>
-                
-                <div class="flex items-center gap-3 py-2">
-                    <div class="flex-1 h-[1px] bg-gray-100"></div>
-                    <span class="text-[10px] text-gray-300 font-bold uppercase">o usa tu correo</span>
-                    <div class="flex-1 h-[1px] bg-gray-100"></div>
-                </div>
-
-                <input type="email" id="auth-email" placeholder="Correo electrónico">
-                <button onclick="iniciar()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Ingresar</button>
+                <div class="text-center text-gray-400 text-xs py-2 uppercase font-bold tracking-widest">o</div>
+                <input type="email" placeholder="Correo electrónico" class="w-full bg-gray-50 border-none p-4 rounded-2xl">
+                <button onclick="goToProfile()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Registrarse Manualmente</button>
             </div>
         </section>
 
-        <section id="view-setup" class="view hidden p-8">
-            <h2 class="text-2xl font-bold">Crea tu Perfil</h2>
-            <p class="text-gray-400 text-sm mb-6">Solo te tomará un minuto.</p>
+        <section id="view-profile-setup" class="view hidden p-8 flex flex-col space-y-6">
+            <h2 class="text-2xl font-bold">Completa tu Perfil</h2>
             
-            <div class="scroll-area space-y-4">
-                <input type="text" id="setup-name" placeholder="Nombre completo">
-                <input type="tel" id="setup-phone" placeholder="WhatsApp">
+            <div class="flex flex-col items-center space-y-4">
+                <div onclick="alert('Aquí se abriría la cámara')" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer">
+                    <span class="material-symbols-outlined text-gray-400">add_a_photo</span>
+                </div>
+                <p class="text-xs font-bold text-blue-600">Subir foto de perfil</p>
+            </div>
+
+            <div class="space-y-4">
+                <input type="text" id="setup-name" placeholder="Nombre Completo *" class="w-full bg-gray-50 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-100">
+                <input type="tel" id="setup-phone" placeholder="Celular (WhatsApp) *" class="w-full bg-gray-50 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-100">
                 
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1 mt-4">¿Cuál es tu rol?</p>
-                <div class="grid grid-cols-2 gap-3">
-                    <div onclick="selectRole('alumno')" id="card-alumno" class="role-card">Alumno</div>
-                    <div onclick="selectRole('maestro')" id="card-maestro" class="role-card">Maestro</div>
+                <p class="text-sm font-bold text-gray-600 mt-4">Selecciona tu Rol:</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="setProfileRole('alumno')" id="btn-role-alumno" class="p-4 border-2 border-gray-100 rounded-2xl font-bold">Soy Alumno</button>
+                    <button onclick="setProfileRole('maestro')" id="btn-role-maestro" class="p-4 border-2 border-gray-100 rounded-2xl font-bold">Soy Maestro</button>
                 </div>
 
-                <div id="extra-alumno" class="hidden">
-                    <select id="setup-maestro">
-                        <option value="">Selecciona tu maestro...</option>
-                        <option value="Pastor Juan">Pastor Juan Carlos</option>
-                        <option value="Maestra Elena">Maestra Elena</option>
+                <div id="setup-alumno-extra" class="hidden animate-fade-in">
+                    <select id="select-maestro" class="w-full bg-gray-50 p-4 rounded-2xl outline-none">
+                        <option value="">Elegir mi Maestro...</option>
+                        <option value="1">Pastor Juan Carlos</option>
+                        <option value="2">Maestra María</option>
                     </select>
                 </div>
 
-                <div id="extra-maestro" class="hidden">
-                    <input type="password" id="setup-code" placeholder="Código de Maestro (1234)">
+                <div id="setup-maestro-extra" class="hidden animate-fade-in">
+                    <input type="password" id="maestro-code" placeholder="Código Ministerial (1234)" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border-2 border-blue-50">
                 </div>
-
-                <button onclick="finalizarRegistro()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl mt-6">Comenzar</button>
             </div>
+
+            <button onclick="finishSetup()" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-bold shadow-xl mt-auto">Guardar y Entrar</button>
         </section>
 
-        <section id="view-home" class="view hidden">
-            <header class="p-6 border-b bg-white flex justify-between items-center">
+        <section id="view-student-home" class="view hidden flex-1 flex flex-col">
+            <header class="p-6 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div id="avatar" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold"></div>
+                    <div id="user-avatar" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">D</div>
                     <div>
-                        <p id="user-name" class="font-bold text-sm leading-none"></p>
-                        <p id="user-role" class="text-[9px] text-gray-400 font-bold uppercase mt-1"></p>
+                        <p id="display-name" class="text-lg font-bold">Daniel</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Alumno en formación</p>
                     </div>
                 </div>
-                <button onclick="cerrarSesion()" class="text-gray-300"><span class="material-symbols-outlined">logout</span></button>
+                <button onclick="logout()" class="text-red-500"><span class="material-symbols-outlined">logout</span></button>
             </header>
-            <div id="books-list" class="scroll-area p-6 space-y-4"></div>
+            
+            <div id="books-container" class="p-6 space-y-4 overflow-y-auto pb-24">
+                </div>
+
+            <nav class="absolute bottom-0 left-0 right-0 h-20 bg-white border-t flex items-center justify-around">
+                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-bold">Inicio</span></button>
+                <button onclick="alert('Próximamente')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button onclick="alert('Mi Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Perfil</span></button>
+            </nav>
         </section>
 
-        <nav id="bottom-nav" class="hidden">
-            <button onclick="cambiarPantalla('view-home')" id="nav-home" class="active">
-                <span class="material-symbols-outlined">auto_stories</span><b>Libros</b>
-            </button>
-            <button onclick="alert('Próximamente Comunidad')" id="nav-comunidad">
-                <span class="material-symbols-outlined">groups</span><b>Comunidad</b>
-            </button>
-            <button onclick="cambiarPantalla('view-profile')" id="nav-perfil">
-                <span class="material-symbols-outlined">person</span><b>Perfil</b>
-            </button>
-        </nav>
-
     </div>
-
-    <script>
-        // --- LOGICA DE ESTADO ---
-        let usuario = JSON.parse(localStorage.getItem('sesion_cristo')) || null;
-        let rolSeleccionado = "";
-
-        // Al cargar, verificar si hay sesión
-        window.onload = () => {
-            if (usuario) {
-                mostrarAppPrincipal();
-            } else {
-                cambiarPantalla('view-auth');
-            }
-        };
-
-        // --- FUNCIONES DE NAVEGACIÓN ---
-        function cambiarPantalla(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        // --- LOGICA DE REGISTRO ---
-        function iniciar() {
-            const email = document.getElementById('auth-email').value;
-            if(!email.includes('@')) return alert("Ingresa un correo válido");
-            cambiarPantalla('view-setup');
-        }
-
-        function loginSocial(red) {
-            // Simulación rápida: mandamos al setup
-            cambiarPantalla('view-setup');
-        }
-
-        function selectRole(rol) {
-            rolSeleccionado = rol;
-            document.getElementById('card-alumno').className = "role-card " + (rol === 'alumno' ? 'active' : '');
-            document.getElementById('card-maestro').className = "role-card " + (rol === 'maestro' ? 'active' : '');
-            
-            document.getElementById('extra-alumno').classList.toggle('hidden', rol !== 'alumno');
-            document.getElementById('extra-maestro').classList.toggle('hidden', rol !== 'maestro');
-        }
-
-        function finalizarRegistro() {
-            const nombre = document.getElementById('setup-name').value;
-            const tel = document.getElementById('setup-phone').value;
-            
-            if(!nombre || !tel || !rolSeleccionado) return alert("Por favor completa los campos");
-
-            if(rolSeleccionado === 'maestro' && document.getElementById('setup-code').value !== '1234') {
-                return alert("Código de maestro incorrecto");
-            }
-
-            usuario = {
-                nombre: nombre,
-                whatsapp: tel,
-                rol: rolSeleccionado,
-                email: document.getElementById('auth-email').value
-            };
-
-            localStorage.setItem('sesion_cristo', JSON.stringify(usuario));
-            mostrarAppPrincipal();
-        }
-
-        // --- APP INTERNA ---
-        function mostrarAppPrincipal() {
-            cambiarPantalla('view-home');
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            
-            // Actualizar textos
-            document.getElementById('user-name').innerText = usuario.nombre;
-            document.getElementById('user-role').innerText = usuario.rol;
-            document.getElementById('avatar').innerText = usuario.nombre[0].toUpperCase();
-
-            renderLibros();
-        }
-
-        function renderLibros() {
-            const libros = [
-                { id: 1, titulo: 'Libro 1: Fundamentos', color: 'bg-blue-600' },
-                { id: 2, titulo: 'Libro 2: Oración', color: 'bg-gray-300' }
-            ];
-            const container = document.getElementById('books-list');
-            container.innerHTML = libros.map(l => `
-                <div class="bg-white p-5 rounded-3xl border border-gray-100 flex items-center gap-4 shadow-sm">
-                    <div class="w-12 h-12 ${l.color} rounded-2xl flex items-center justify-center text-white font-bold">${l.id}</div>
-                    <p class="font-bold text-gray-800 flex-1">${l.titulo}</p>
-                    <span class="material-symbols-outlined text-gray-300">chevron_right</span>
-                </div>
-            `).join('');
-        }
-
-        function cerrarSesion() {
-            localStorage.removeItem('sesion_cristo');
-            location.reload();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
