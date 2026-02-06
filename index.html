@@ -11,39 +11,22 @@
         body { font-family: 'Lexend', sans-serif; background-color: #f3f4f6; }
         .view { min-height: 100vh; background: white; }
         .hidden { display: none !important; }
-        
-        /* Estilo para input de archivo oculto */
+        /* Input file oculto */
         input[type="file"] { display: none; }
-        
-        /* Animación suave */
+        /* Animación simple */
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="flex justify-center">
 
-    <div id="app-container" class="w-full max-w-md bg-white min-h-screen shadow-2xl relative overflow-hidden">
+    <div id="app-container" class="w-full max-w-md bg-white min-h-screen shadow-2xl relative overflow-hidden flex flex-col">
 
         <section id="view-auth" class="view p-8 flex flex-col justify-center items-center fade-in">
             <div class="mb-8 text-center">
                 <span class="material-symbols-outlined text-blue-600 text-7xl">account_circle</span>
                 <h1 class="text-2xl font-bold mt-2 text-gray-800">Crear Cuenta</h1>
                 <p class="text-gray-400 text-sm">Únete a la comunidad espiritual</p>
-            </div>
-
-            <div class="w-full space-y-3 mb-6">
-                <button class="w-full flex items-center justify-center gap-3 border border-gray-200 py-3 rounded-xl font-bold text-gray-600 hover:bg-gray-50">
-                    <img src="https://www.google.com/favicon.ico" class="w-5"> Continuar con Google
-                </button>
-                <button class="w-full flex items-center justify-center gap-3 bg-black text-white py-3 rounded-xl font-bold">
-                    <span class="material-symbols-outlined text-xl">apple</span> Continuar con Apple
-                </button>
-            </div>
-
-            <div class="flex items-center w-full gap-2 mb-6">
-                <div class="h-[1px] bg-gray-200 flex-1"></div>
-                <span class="text-xs text-gray-400 font-bold">O</span>
-                <div class="h-[1px] bg-gray-200 flex-1"></div>
             </div>
 
             <div class="w-full space-y-4">
@@ -54,21 +37,21 @@
                     class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500 transition-colors">
 
                 <button onclick="validarRegistro()" 
-                    class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-200 active:scale-95 transition-transform">
+                    class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg active:scale-95 transition-transform">
                     Registrarse Manualmente
                 </button>
             </div>
         </section>
 
-        <section id="view-setup" class="view hidden p-8 flex flex-col fade-in">
+        <section id="view-setup" class="view hidden p-8 flex flex-col fade-in h-screen">
             <div class="flex items-center mb-6">
                 <button onclick="volverAuth()" class="mr-4 text-gray-500"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="text-xl font-bold text-gray-800">Completa tu Perfil</h2>
             </div>
 
-            <div class="flex flex-col items-center mb-8">
+            <div class="flex flex-col items-center mb-6">
                 <label for="file-upload" class="relative cursor-pointer group">
-                    <div id="avatar-preview" class="w-28 h-28 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
+                    <div id="avatar-preview" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
                         <span class="material-symbols-outlined text-gray-400 text-4xl">add_a_photo</span>
                     </div>
                     <div class="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-md">
@@ -76,10 +59,10 @@
                     </div>
                 </label>
                 <input id="file-upload" type="file" accept="image/*" onchange="cargarFoto(event)">
-                <p class="text-xs text-blue-600 font-bold mt-3">Toca para subir foto</p>
+                <p class="text-xs text-blue-600 font-bold mt-2">Subir foto</p>
             </div>
 
-            <div class="space-y-4 flex-1 overflow-y-auto">
+            <div class="space-y-4 flex-1 overflow-y-auto pb-4">
                 <div>
                     <label class="text-xs font-bold text-gray-400 ml-1">NOMBRE COMPLETO</label>
                     <input type="text" id="setup-name" class="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl outline-none focus:border-blue-500">
@@ -90,24 +73,36 @@
                     <input type="tel" id="setup-phone" class="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl outline-none focus:border-blue-500">
                 </div>
 
-                <div class="pt-4">
+                <div class="pt-2">
                     <label class="text-xs font-bold text-gray-400 ml-1">SELECCIONA TU ROL</label>
                     <div class="grid grid-cols-2 gap-3 mt-2">
-                        <div onclick="elegirRol('alumno')" id="rol-alumno" class="border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer hover:bg-gray-50">
+                        <div onclick="elegirRol('alumno')" id="btn-alumno" class="border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50">
                             Alumno
                         </div>
-                        <div onclick="elegirRol('maestro')" id="rol-maestro" class="border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer hover:bg-gray-50">
+                        <div onclick="elegirRol('maestro')" id="btn-maestro" class="border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50">
                             Maestro
                         </div>
                     </div>
                 </div>
 
-                <div id="campo-maestro-extra" class="hidden mt-4">
-                    <input type="password" id="maestro-code" placeholder="Código de acceso (1234)" class="w-full bg-red-50 border border-red-100 p-4 rounded-xl text-red-600 font-bold outline-none">
+                <div id="opcion-alumno" class="hidden animate-fade-in bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <label class="text-xs font-bold text-blue-600 ml-1 uppercase">Elige a tu guía</label>
+                    <select id="select-maestro" class="w-full mt-2 p-3 rounded-lg border-none outline-none text-gray-700 font-medium">
+                        <option value="">Seleccionar Maestro...</option>
+                        <option value="Pastor Juan Carlos">Pastor Juan Carlos</option>
+                        <option value="Maestra Elena">Maestra Elena</option>
+                        <option value="Lider Roberto">Líder Roberto</option>
+                    </select>
                 </div>
+
+                <div id="opcion-maestro" class="hidden animate-fade-in bg-orange-50 p-4 rounded-xl border border-orange-100">
+                    <label class="text-xs font-bold text-orange-600 ml-1 uppercase">Código de Acceso</label>
+                    <input type="number" id="input-codigo" placeholder="Ingrese código (123)" class="w-full mt-2 p-3 rounded-lg border-none outline-none font-bold text-gray-700">
+                </div>
+
             </div>
 
-            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-4">
+            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-2">
                 Confirmar y Entrar
             </button>
         </section>
@@ -125,9 +120,11 @@
             
             <div class="p-6 text-center text-gray-400 mt-20">
                 <span class="material-symbols-outlined text-6xl mb-4">check_circle</span>
-                <h3 class="text-xl font-bold text-gray-700">¡Registro Exitoso!</h3>
-                <p>Aquí cargaremos los libros.</p>
-                <button onclick="cerrarSesion()" class="mt-8 text-red-500 underline text-sm font-bold">Cerrar Sesión (Reiniciar)</button>
+                <h3 class="text-xl font-bold text-gray-700">¡Todo Listo!</h3>
+                <p class="mt-2 text-sm">Bienvenido a la plataforma.</p>
+                <div id="info-extra" class="mt-4 p-4 bg-gray-100 rounded-xl text-xs text-gray-600 font-mono"></div>
+                
+                <button onclick="cerrarSesion()" class="mt-8 text-red-500 font-bold text-sm">Cerrar Sesión</button>
             </div>
             
             <div class="absolute bottom-0 w-full h-20 border-t bg-white flex justify-around items-center text-gray-400">
@@ -140,33 +137,27 @@
     </div>
 
     <script>
-        // --- VARIABLES GLOBALES ---
-        let registroData = {
+        // ESTADO GLOBAL
+        let registro = {
             email: "",
             password: "",
-            fotoBase64: null,
+            rol: "", // 'alumno' o 'maestro'
             nombre: "",
             telefono: "",
-            rol: ""
+            foto: null,
+            maestroAsignado: "", // Solo si es alumno
         };
 
-        // --- 1. LÓGICA DE REGISTRO (EMAIL Y PASSWORD) ---
+        // --- 1. VALIDAR LOGIN ---
         function validarRegistro() {
             const email = document.getElementById('input-email').value;
             const pass = document.getElementById('input-password').value;
 
-            if(email === "" || pass === "") {
-                alert("Por favor, completa el correo y la contraseña.");
-                return;
-            }
-            if(pass.length < 4) {
-                alert("La contraseña debe tener al menos 4 caracteres.");
-                return;
-            }
-
-            // Guardamos temporalmente y avanzamos
-            registroData.email = email;
-            registroData.password = pass;
+            if(!email || !pass) return alert("Completa el correo y la contraseña.");
+            
+            registro.email = email;
+            registro.password = pass;
+            
             cambiarVista('view-auth', 'view-setup');
         }
 
@@ -174,106 +165,105 @@
             cambiarVista('view-setup', 'view-auth');
         }
 
-        // --- 2. LÓGICA DE FOTO (FILE READER) ---
+        // --- 2. MANEJO DE FOTO ---
         function cargarFoto(event) {
             const file = event.target.files[0];
-            if (file) {
+            if(file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Guardar la imagen en string para usarla luego
-                    registroData.fotoBase64 = e.target.result;
-                    // Mostrarla en el círculo
-                    const preview = document.getElementById('avatar-preview');
-                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-                    preview.classList.remove('border-dashed', 'border-2');
-                }
+                reader.onload = (e) => {
+                    registro.foto = e.target.result;
+                    document.getElementById('avatar-preview').innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
+                    document.getElementById('avatar-preview').classList.remove('border-dashed');
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        // --- 3. LÓGICA DE ROL ---
+        // --- 3. LÓGICA DE ROLES (CONDICIONAL) ---
         function elegirRol(rol) {
-            registroData.rol = rol;
+            registro.rol = rol;
             
-            // Estilos visuales de selección
-            document.getElementById('rol-alumno').className = `border-2 p-4 rounded-xl text-center font-bold cursor-pointer transition-all ${rol === 'alumno' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-100 text-gray-400'}`;
-            document.getElementById('rol-maestro').className = `border-2 p-4 rounded-xl text-center font-bold cursor-pointer transition-all ${rol === 'maestro' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-100 text-gray-400'}`;
+            // 1. Resetear estilos de botones
+            document.getElementById('btn-alumno').className = "border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50";
+            document.getElementById('btn-maestro').className = "border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50";
 
-            // Mostrar campo extra si es maestro
-            const campoMaestro = document.getElementById('campo-maestro-extra');
-            if(rol === 'maestro') {
-                campoMaestro.classList.remove('hidden');
+            // 2. Activar el botón seleccionado
+            if (rol === 'alumno') {
+                document.getElementById('btn-alumno').className = "border-2 border-blue-600 bg-blue-50 p-4 rounded-xl text-center font-bold text-blue-600 cursor-pointer transition-all";
+                // Mostrar opciones alumno, ocultar maestro
+                document.getElementById('opcion-alumno').classList.remove('hidden');
+                document.getElementById('opcion-maestro').classList.add('hidden');
             } else {
-                campoMaestro.classList.add('hidden');
+                document.getElementById('btn-maestro').className = "border-2 border-blue-600 bg-blue-50 p-4 rounded-xl text-center font-bold text-blue-600 cursor-pointer transition-all";
+                // Mostrar opciones maestro, ocultar alumno
+                document.getElementById('opcion-alumno').classList.add('hidden');
+                document.getElementById('opcion-maestro').classList.remove('hidden');
             }
         }
 
-        // --- 4. FINALIZAR Y ENTRAR ---
+        // --- 4. GUARDAR Y VALIDAR ---
         function guardarPerfil() {
             const nombre = document.getElementById('setup-name').value;
             const tel = document.getElementById('setup-phone').value;
 
-            if(nombre === "" || tel === "" || registroData.rol === "") {
-                alert("Por favor completa tu nombre, teléfono y selecciona un rol.");
-                return;
+            if(!nombre || !tel || !registro.rol) {
+                return alert("Completa nombre, teléfono y selecciona un rol.");
             }
 
-            // Validación extra para maestro
-            if(registroData.rol === 'maestro') {
-                const codigo = document.getElementById('maestro-code').value;
-                if(codigo !== '1234') {
-                    alert("El código de maestro es incorrecto.");
-                    return;
-                }
+            // VALIDACIÓN ESPECÍFICA POR ROL
+            if(registro.rol === 'alumno') {
+                const maestro = document.getElementById('select-maestro').value;
+                if(!maestro) return alert("Debes seleccionar un Maestro.");
+                registro.maestroAsignado = maestro;
+            } 
+            else if (registro.rol === 'maestro') {
+                const codigo = document.getElementById('input-codigo').value;
+                if(codigo !== "123") return alert("Código incorrecto. Pide el código al administrador.");
             }
 
-            registroData.nombre = nombre;
-            registroData.telefono = tel;
-
-            // Simular guardado en base de datos (localStorage)
-            localStorage.setItem('usuario_cristo', JSON.stringify(registroData));
-
-            iniciarHome();
+            // Todo OK, guardamos
+            registro.nombre = nombre;
+            registro.telefono = tel;
+            localStorage.setItem('usuario_cristo_app', JSON.stringify(registro));
+            
+            entrarApp();
         }
 
-        function iniciarHome() {
-            // Cargar datos en la vista Home
-            document.getElementById('home-name').innerText = registroData.nombre;
-            document.getElementById('home-role').innerText = registroData.rol;
+        function entrarApp() {
+            // Actualizar vista Home
+            document.getElementById('home-name').innerText = registro.nombre;
+            document.getElementById('home-role').innerText = registro.rol === 'alumno' ? 'Alumno' : 'Maestro';
             
-            if(registroData.fotoBase64) {
-                document.getElementById('home-avatar').innerHTML = `<img src="${registroData.fotoBase64}" class="w-full h-full object-cover">`;
+            if(registro.foto) {
+                document.getElementById('home-avatar').innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
             }
+
+            // Mensaje Debug para verificar que guardamos el dato extra
+            let extraInfo = "";
+            if(registro.rol === 'alumno') extraInfo = "Maestro asignado: " + registro.maestroAsignado;
+            else extraInfo = "Acceso Maestro verificado";
+            document.getElementById('info-extra').innerText = extraInfo;
 
             cambiarVista('view-setup', 'view-home');
         }
 
-        // --- UTILIDADES ---
-        function cambiarVista(fromId, toId) {
-            document.getElementById(fromId).classList.add('hidden');
-            document.getElementById(toId).classList.remove('hidden');
+        function cambiarVista(from, to) {
+            document.getElementById(from).classList.add('hidden');
+            document.getElementById(to).classList.remove('hidden');
         }
 
         function cerrarSesion() {
-            localStorage.removeItem('usuario_cristo');
+            localStorage.removeItem('usuario_cristo_app');
             location.reload();
         }
 
-        // --- AUTO LOGIN (Si ya se registró antes) ---
-        window.onload = function() {
-            const guardado = localStorage.getItem('usuario_cristo');
-            if(guardado) {
-                registroData = JSON.parse(guardado);
-                // Saltamos directo al home
+        // Persistencia
+        window.onload = () => {
+            const data = localStorage.getItem('usuario_cristo_app');
+            if(data) {
+                registro = JSON.parse(data);
+                entrarApp();
                 document.getElementById('view-auth').classList.add('hidden');
-                document.getElementById('view-home').classList.remove('hidden');
-                
-                // Rellenar datos del home
-                document.getElementById('home-name').innerText = registroData.nombre;
-                document.getElementById('home-role').innerText = registroData.rol;
-                if(registroData.fotoBase64) {
-                    document.getElementById('home-avatar').innerHTML = `<img src="${registroData.fotoBase64}" class="w-full h-full object-cover">`;
-                }
             }
         }
     </script>
