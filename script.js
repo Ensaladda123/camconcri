@@ -1,16 +1,17 @@
-// script.js mejorado
+// script.js actualizado
 let userData = {
+    email: "",
     name: "",
     phone: "",
     role: "",
     maestro: "",
-    isSetupComplete: false
+    photo: null
 };
 
 const BOOKS_DATA = [
     { id: 1, title: 'Libro 1: Fundamentos', chapters: 5, status: 'disponible', color: 'bg-blue-600' },
     { id: 2, title: 'Libro 2: La Oración', chapters: 4, status: 'bloqueado', color: 'bg-gray-400' },
-    // Agregaremos los 6 libros aquí
+    { id: 3, title: 'Libro 3: Carácter', chapters: 6, status: 'bloqueado', color: 'bg-gray-400' },
 ];
 
 function showView(viewId) {
@@ -18,17 +19,29 @@ function showView(viewId) {
     document.getElementById(viewId).classList.remove('hidden');
 }
 
+// Lógica de Foto desde Galería
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            userData.photo = e.target.result;
+            const preview = document.getElementById('profile-preview');
+            preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function goToProfile() {
+    userData.email = document.getElementById('auth-email').value || "invitado@cristo.com";
     showView('view-profile-setup');
 }
 
 function setProfileRole(role) {
     userData.role = role;
-    // Estética de botones
-    document.getElementById('btn-role-alumno').className = role === 'alumno' ? 'p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl font-bold' : 'p-4 border-2 border-gray-100 rounded-2xl font-bold';
-    document.getElementById('btn-role-maestro').className = role === 'maestro' ? 'p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl font-bold' : 'p-4 border-2 border-gray-100 rounded-2xl font-bold';
+    document.getElementById('btn-role-alumno').className = role === 'alumno' ? 'p-3 border-2 border-blue-600 bg-blue-50 rounded-xl font-bold text-sm' : 'p-3 border-2 border-gray-100 rounded-xl font-bold text-sm';
+    document.getElementById('btn-role-maestro').className = role === 'maestro' ? 'p-3 border-2 border-blue-600 bg-blue-50 rounded-xl font-bold text-sm' : 'p-3 border-2 border-gray-100 rounded-xl font-bold text-sm';
     
-    // Mostrar campos extra
     document.getElementById('setup-alumno-extra').classList.toggle('hidden', role !== 'alumno');
     document.getElementById('setup-maestro-extra').classList.toggle('hidden', role !== 'maestro');
 }
@@ -38,54 +51,71 @@ function finishSetup() {
     const phone = document.getElementById('setup-phone').value;
     
     if (!name || !phone || !userData.role) {
-        alert("Por favor completa todos los campos obligatorios (*)");
+        alert("Completa los campos obligatorios");
         return;
     }
 
-    if (userData.role === 'maestro') {
-        const code = document.getElementById('maestro-code').value;
-        if (code !== "1234") {
-            alert("Código Ministerial Inválido");
-            return;
-        }
-    } else {
-        const maestro = document.getElementById('select-maestro').value;
-        if (!maestro) {
-            alert("Debes elegir un maestro para que corrija tus tareas");
-            return;
-        }
-    }
-
-    // Guardar datos y entrar
     userData.name = name;
-    document.getElementById('display-name').innerText = name;
-    document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
-    
+    userData.phone = phone;
+    userData.maestro = document.getElementById('select-maestro').value;
+
+    // Actualizar UI del Perfil y Home
+    updateProfileUI();
+
     if (userData.role === 'alumno') {
         renderBooks();
         showView('view-student-home');
     } else {
-        alert("¡Bienvenido Maestro! Cargando panel...");
-        // Aquí iría el panel de maestro
+        alert("¡Bienvenido Maestro!");
     }
+}
+
+function updateProfileUI() {
+    // Foto en Home y Detalles
+    const avatarHome = document.getElementById('user-avatar-home');
+    const avatarDetail = document.getElementById('profile-img-detail');
+    
+    const content = userData.photo ? `<img src="${userData.photo}" class="w-full h-full object-cover">` : userData.name.charAt(0);
+    avatarHome.innerHTML = content;
+    avatarDetail.innerHTML = content;
+
+    // Textos
+    document.getElementById('display-name').innerText = userData.name;
+    document.getElementById('detail-name').innerText = userData.name;
+    document.getElementById('detail-email').innerText = userData.email;
+    document.getElementById('detail-phone').innerText = userData.phone;
+    document.getElementById('detail-role').innerText = userData.role;
+    document.getElementById('detail-maestro').innerText = userData.maestro || "N/A";
+    document.getElementById('detail-maestro-row').classList.toggle('hidden', userData.role !== 'alumno');
 }
 
 function renderBooks() {
     const container = document.getElementById('books-container');
     container.innerHTML = BOOKS_DATA.map(book => `
-        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 ${book.status === 'bloqueado' ? 'opacity-50' : ''}">
-            <div class="w-14 h-14 ${book.color} rounded-2xl flex items-center justify-center text-white">
-                <span class="material-symbols-outlined">${book.status === 'bloqueado' ? 'lock' : 'book'}</span>
+        <div onclick="${book.status === 'disponible' ? `openBook('${book.title}')` : `alert('Libro bloqueado hasta corregir el anterior')`}" 
+             class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 active:scale-95 transition-all cursor-pointer">
+            <div class="w-12 h-12 ${book.color} rounded-2xl flex items-center justify-center text-white">
+                <span class="material-symbols-outlined text-sm">${book.status === 'bloqueado' ? 'lock' : 'book_2'}</span>
             </div>
             <div class="flex-1">
-                <h4 class="font-bold text-gray-900">${book.title}</h4>
-                <p class="text-xs text-gray-400">${book.chapters} Capítulos</p>
+                <h4 class="font-bold text-gray-900 text-sm">${book.title}</h4>
+                <p class="text-[9px] font-bold text-gray-400 uppercase">${book.chapters} Capítulos</p>
             </div>
             <span class="material-symbols-outlined text-gray-300">chevron_right</span>
         </div>
     `).join('');
 }
 
+function openBook(title) {
+    document.getElementById('chapter-title').innerText = title;
+    showView('view-chapter');
+}
+
+function submitLesson() {
+    alert("¡Tarea enviada a " + userData.maestro + "!");
+    showView('view-student-home');
+}
+
 function logout() {
-    location.reload(); // Reinicia la app para el ejemplo
+    location.reload();
 }
