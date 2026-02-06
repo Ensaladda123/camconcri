@@ -1,271 +1,129 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Caminando con Cristo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Lexend', sans-serif; background-color: #f3f4f6; }
-        .view { min-height: 100vh; background: white; }
-        .hidden { display: none !important; }
-        /* Input file oculto */
-        input[type="file"] { display: none; }
-        /* Animación simple */
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
-</head>
-<body class="flex justify-center">
-
-    <div id="app-container" class="w-full max-w-md bg-white min-h-screen shadow-2xl relative overflow-hidden flex flex-col">
-
-        <section id="view-auth" class="view p-8 flex flex-col justify-center items-center fade-in">
-            <div class="mb-8 text-center">
-                <span class="material-symbols-outlined text-blue-600 text-7xl">account_circle</span>
-                <h1 class="text-2xl font-bold mt-2 text-gray-800">Crear Cuenta</h1>
-                <p class="text-gray-400 text-sm">Únete a la comunidad espiritual</p>
-            </div>
-
-            <div class="w-full space-y-4">
-                <input type="email" id="input-email" placeholder="Correo electrónico" 
-                    class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500 transition-colors">
-                
-                <input type="password" id="input-password" placeholder="Crear contraseña" 
-                    class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500 transition-colors">
-
-                <button onclick="validarRegistro()" 
-                    class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg active:scale-95 transition-transform">
-                    Registrarse Manualmente
-                </button>
-            </div>
-        </section>
-
-        <section id="view-setup" class="view hidden p-8 flex flex-col fade-in h-screen">
-            <div class="flex items-center mb-6">
-                <button onclick="volverAuth()" class="mr-4 text-gray-500"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h2 class="text-xl font-bold text-gray-800">Completa tu Perfil</h2>
-            </div>
-
-            <div class="flex flex-col items-center mb-6">
-                <label for="file-upload" class="relative cursor-pointer group">
-                    <div id="avatar-preview" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
-                        <span class="material-symbols-outlined text-gray-400 text-4xl">add_a_photo</span>
-                    </div>
-                    <div class="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-md">
-                        <span class="material-symbols-outlined text-sm">edit</span>
-                    </div>
-                </label>
-                <input id="file-upload" type="file" accept="image/*" onchange="cargarFoto(event)">
-                <p class="text-xs text-blue-600 font-bold mt-2">Subir foto</p>
-            </div>
-
-            <div class="space-y-4 flex-1 overflow-y-auto pb-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 ml-1">NOMBRE COMPLETO</label>
-                    <input type="text" id="setup-name" class="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl outline-none focus:border-blue-500">
-                </div>
-                
-                <div>
-                    <label class="text-xs font-bold text-gray-400 ml-1">WHATSAPP</label>
-                    <input type="tel" id="setup-phone" class="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl outline-none focus:border-blue-500">
-                </div>
-
-                <div class="pt-2">
-                    <label class="text-xs font-bold text-gray-400 ml-1">SELECCIONA TU ROL</label>
-                    <div class="grid grid-cols-2 gap-3 mt-2">
-                        <div onclick="elegirRol('alumno')" id="btn-alumno" class="border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50">
-                            Alumno
-                        </div>
-                        <div onclick="elegirRol('maestro')" id="btn-maestro" class="border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50">
-                            Maestro
-                        </div>
+<section id="view-home-alumno" class="view hidden flex-1 flex flex-col fade-in">
+            <header class="p-6 flex items-center justify-between border-b">
+                <div class="flex items-center gap-3">
+                    <div id="avatar-alumno" class="w-12 h-12 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-xl"></div>
+                    <div>
+                        <p id="name-alumno" class="font-bold text-lg leading-none"></p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Alumno en formación</p>
                     </div>
                 </div>
-
-                <div id="opcion-alumno" class="hidden animate-fade-in bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <label class="text-xs font-bold text-blue-600 ml-1 uppercase">Elige a tu guía</label>
-                    <select id="select-maestro" class="w-full mt-2 p-3 rounded-lg border-none outline-none text-gray-700 font-medium">
-                        <option value="">Seleccionar Maestro...</option>
-                        <option value="Pastor Juan Carlos">Pastor Juan Carlos</option>
-                        <option value="Maestra Elena">Maestra Elena</option>
-                        <option value="Lider Roberto">Líder Roberto</option>
-                    </select>
-                </div>
-
-                <div id="opcion-maestro" class="hidden animate-fade-in bg-orange-50 p-4 rounded-xl border border-orange-100">
-                    <label class="text-xs font-bold text-orange-600 ml-1 uppercase">Código de Acceso</label>
-                    <input type="number" id="input-codigo" placeholder="Ingrese código (123)" class="w-full mt-2 p-3 rounded-lg border-none outline-none font-bold text-gray-700">
-                </div>
-
-            </div>
-
-            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-2">
-                Confirmar y Entrar
-            </button>
-        </section>
-
-        <section id="view-home" class="view hidden relative">
-            <header class="p-6 bg-white border-b flex items-center gap-4 pt-8">
-                <div id="home-avatar" class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
-                    <span class="material-symbols-outlined text-gray-400">person</span>
-                </div>
-                <div>
-                    <h2 id="home-name" class="font-bold text-lg leading-tight">Usuario</h2>
-                    <span id="home-role" class="text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2 py-1 rounded">Rol</span>
-                </div>
+                <button onclick="cerrarSesion()" class="text-red-400"><span class="material-symbols-outlined">logout</span></button>
             </header>
-            
-            <div class="p-6 text-center text-gray-400 mt-20">
-                <span class="material-symbols-outlined text-6xl mb-4">check_circle</span>
-                <h3 class="text-xl font-bold text-gray-700">¡Todo Listo!</h3>
-                <p class="mt-2 text-sm">Bienvenido a la plataforma.</p>
-                <div id="info-extra" class="mt-4 p-4 bg-gray-100 rounded-xl text-xs text-gray-600 font-mono"></div>
-                
-                <button onclick="cerrarSesion()" class="mt-8 text-red-500 font-bold text-sm">Cerrar Sesión</button>
+
+            <div class="p-6 scroll-area flex-1 overflow-y-auto pb-24">
+                <h3 class="font-bold text-gray-800 mb-4 text-xl">Mis Libros</h3>
+                <div id="lista-libros" class="space-y-4">
+                    </div>
+
+                <div class="mt-12 bg-blue-50 p-6 rounded-3xl border border-blue-100">
+                    <p class="text-blue-600 font-bold text-xs uppercase mb-3">Palabras de Bendición</p>
+                    <div id="carousel-bendiciones" class="italic text-gray-600 text-sm">
+                        "¡Este curso cambió mi vida! Gracias a Dios por mis maestros."
+                    </div>
+                </div>
             </div>
-            
-            <div class="absolute bottom-0 w-full h-20 border-t bg-white flex justify-around items-center text-gray-400">
-                <div class="flex flex-col items-center text-blue-600"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-bold">Inicio</span></div>
-                <div class="flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></div>
-                <div class="flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Perfil</span></div>
-            </div>
+
+            <nav class="absolute bottom-0 w-full h-20 bg-white border-t flex items-center justify-around">
+                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">auto_stories</span><span class="text-[10px] font-bold">Libros</span></button>
+                <button onclick="alert('Comunidad')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">forum</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button onclick="alert('Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Mi Perfil</span></button>
+            </nav>
         </section>
 
-    </div>
+        <section id="view-home-maestro" class="view hidden flex-1 flex flex-col fade-in">
+            <header class="p-6 flex items-center justify-between border-b bg-gray-50">
+                <div class="flex items-center gap-3">
+                    <div id="avatar-maestro" class="w-12 h-12 bg-orange-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-xl"></div>
+                    <div>
+                        <p id="name-maestro" class="font-bold text-lg leading-none"></p>
+                        <p class="text-[10px] text-orange-500 font-bold uppercase mt-1">Panel de Maestro</p>
+                    </div>
+                </div>
+                <button onclick="cerrarSesion()" class="text-red-400"><span class="material-symbols-outlined">logout</span></button>
+            </header>
+
+            <div class="p-6 flex-1 overflow-y-auto pb-24">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-gray-800 text-xl">Alumnos Asignados</h3>
+                    <span class="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded-full">3 Alumnos</span>
+                </div>
+                
+                <div id="lista-alumnos" class="space-y-3">
+                    <div class="bg-white p-4 rounded-2xl border flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500">A</div>
+                            <div>
+                                <p class="font-bold text-sm">Alumno de Prueba 1</p>
+                                <p class="text-[10px] text-orange-500 font-bold">● PENDIENTE DE CORRECCIÓN</p>
+                            </div>
+                        </div>
+                        <button class="bg-blue-600 text-white text-[10px] font-bold px-3 py-2 rounded-lg">CORREGIR</button>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="absolute bottom-0 w-full h-20 bg-white border-t flex items-center justify-around">
+                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">dashboard</span><span class="text-[10px] font-bold">Nómina</span></button>
+                <button onclick="alert('Comunidad')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">forum</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button onclick="alert('Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">manage_accounts</span><span class="text-[10px] font-bold">Perfil</span></button>
+            </nav>
+        </section>
 
     <script>
-        // ESTADO GLOBAL
-        let registro = {
-            email: "",
-            password: "",
-            rol: "", // 'alumno' o 'maestro'
-            nombre: "",
-            telefono: "",
-            foto: null,
-            maestroAsignado: "", // Solo si es alumno
-        };
+        // DATOS DE PRUEBA PARA LOS 6 LIBROS
+        const LIBROS_DATA = [
+            { id: 1, titulo: "Libro 1: Fundamentos", estado: "disponible", color: "bg-blue-600" },
+            { id: 2, titulo: "Libro 2: Oración", estado: "bloqueado", color: "bg-gray-300" },
+            { id: 3, titulo: "Libro 3: Palabra de Dios", estado: "bloqueado", color: "bg-gray-300" },
+            { id: 4, titulo: "Libro 4: El Espíritu Santo", estado: "bloqueado", color: "bg-gray-300" },
+            { id: 5, titulo: "Libro 5: La Iglesia", estado: "bloqueado", color: "bg-gray-300" },
+            { id: 6, titulo: "Libro 6: Evangelismo", estado: "bloqueado", color: "bg-gray-300" }
+        ];
 
-        // --- 1. VALIDAR LOGIN ---
-        function validarRegistro() {
-            const email = document.getElementById('input-email').value;
-            const pass = document.getElementById('input-password').value;
-
-            if(!email || !pass) return alert("Completa el correo y la contraseña.");
-            
-            registro.email = email;
-            registro.password = pass;
-            
-            cambiarVista('view-auth', 'view-setup');
-        }
-
-        function volverAuth() {
-            cambiarVista('view-setup', 'view-auth');
-        }
-
-        // --- 2. MANEJO DE FOTO ---
-        function cargarFoto(event) {
-            const file = event.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    registro.foto = e.target.result;
-                    document.getElementById('avatar-preview').innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
-                    document.getElementById('avatar-preview').classList.remove('border-dashed');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // --- 3. LÓGICA DE ROLES (CONDICIONAL) ---
-        function elegirRol(rol) {
-            registro.rol = rol;
-            
-            // 1. Resetear estilos de botones
-            document.getElementById('btn-alumno').className = "border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50";
-            document.getElementById('btn-maestro').className = "border-2 border-gray-100 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all hover:bg-gray-50";
-
-            // 2. Activar el botón seleccionado
-            if (rol === 'alumno') {
-                document.getElementById('btn-alumno').className = "border-2 border-blue-600 bg-blue-50 p-4 rounded-xl text-center font-bold text-blue-600 cursor-pointer transition-all";
-                // Mostrar opciones alumno, ocultar maestro
-                document.getElementById('opcion-alumno').classList.remove('hidden');
-                document.getElementById('opcion-maestro').classList.add('hidden');
-            } else {
-                document.getElementById('btn-maestro').className = "border-2 border-blue-600 bg-blue-50 p-4 rounded-xl text-center font-bold text-blue-600 cursor-pointer transition-all";
-                // Mostrar opciones maestro, ocultar alumno
-                document.getElementById('opcion-alumno').classList.add('hidden');
-                document.getElementById('opcion-maestro').classList.remove('hidden');
-            }
-        }
-
-        // --- 4. GUARDAR Y VALIDAR ---
-        function guardarPerfil() {
-            const nombre = document.getElementById('setup-name').value;
-            const tel = document.getElementById('setup-phone').value;
-
-            if(!nombre || !tel || !registro.rol) {
-                return alert("Completa nombre, teléfono y selecciona un rol.");
-            }
-
-            // VALIDACIÓN ESPECÍFICA POR ROL
-            if(registro.rol === 'alumno') {
-                const maestro = document.getElementById('select-maestro').value;
-                if(!maestro) return alert("Debes seleccionar un Maestro.");
-                registro.maestroAsignado = maestro;
-            } 
-            else if (registro.rol === 'maestro') {
-                const codigo = document.getElementById('input-codigo').value;
-                if(codigo !== "123") return alert("Código incorrecto. Pide el código al administrador.");
-            }
-
-            // Todo OK, guardamos
-            registro.nombre = nombre;
-            registro.telefono = tel;
-            localStorage.setItem('usuario_cristo_app', JSON.stringify(registro));
-            
-            entrarApp();
-        }
+        // Lógica de Registro (Mantenemos la anterior)
+        // ... (Todas las funciones validarRegistro, cargarFoto, elegirRol que ya tenías) ...
 
         function entrarApp() {
-            // Actualizar vista Home
-            document.getElementById('home-name').innerText = registro.nombre;
-            document.getElementById('home-role').innerText = registro.rol === 'alumno' ? 'Alumno' : 'Maestro';
-            
-            if(registro.foto) {
-                document.getElementById('home-avatar').innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
+            // Decidir a qué Home ir según el ROL
+            if(registro.rol === 'alumno') {
+                document.getElementById('view-setup').classList.add('hidden');
+                document.getElementById('view-home-alumno').classList.remove('hidden');
+                
+                document.getElementById('name-alumno').innerText = registro.nombre;
+                const avatar = document.getElementById('avatar-alumno');
+                if(registro.foto) avatar.innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
+                else avatar.innerText = registro.nombre[0].toUpperCase();
+
+                renderLibros();
+            } else {
+                document.getElementById('view-setup').classList.add('hidden');
+                document.getElementById('view-home-maestro').classList.remove('hidden');
+                
+                document.getElementById('name-maestro').innerText = registro.nombre;
+                const avatar = document.getElementById('avatar-maestro');
+                if(registro.foto) avatar.innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
+                else avatar.innerText = registro.nombre[0].toUpperCase();
             }
-
-            // Mensaje Debug para verificar que guardamos el dato extra
-            let extraInfo = "";
-            if(registro.rol === 'alumno') extraInfo = "Maestro asignado: " + registro.maestroAsignado;
-            else extraInfo = "Acceso Maestro verificado";
-            document.getElementById('info-extra').innerText = extraInfo;
-
-            cambiarVista('view-setup', 'view-home');
         }
 
-        function cambiarVista(from, to) {
-            document.getElementById(from).classList.add('hidden');
-            document.getElementById(to).classList.remove('hidden');
-        }
-
-        function cerrarSesion() {
-            localStorage.removeItem('usuario_cristo_app');
-            location.reload();
-        }
-
-        // Persistencia
-        window.onload = () => {
-            const data = localStorage.getItem('usuario_cristo_app');
-            if(data) {
-                registro = JSON.parse(data);
-                entrarApp();
-                document.getElementById('view-auth').classList.add('hidden');
-            }
+        function renderLibros() {
+            const container = document.getElementById('lista-libros');
+            container.innerHTML = LIBROS_DATA.map(libro => {
+                let statusIcon = libro.estado === 'bloqueado' ? 'lock' : (libro.estado === 'pendiente' ? 'schedule' : 'book');
+                let opacity = libro.estado === 'bloqueado' ? 'opacity-50' : 'active:scale-95';
+                
+                return `
+                    <div class="bg-white p-5 rounded-3xl border border-gray-100 flex items-center gap-4 shadow-sm transition-all ${opacity}">
+                        <div class="w-14 h-14 ${libro.color} rounded-2xl flex items-center justify-center text-white">
+                            <span class="material-symbols-outlined">${statusIcon}</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800">${libro.titulo}</h4>
+                            <p class="text-[10px] font-bold ${libro.estado === 'disponible' ? 'text-blue-500' : 'text-gray-400'} uppercase">${libro.estado}</p>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-300">chevron_right</span>
+                    </div>
+                `;
+            }).join('');
         }
     </script>
-</body>
-</html>
