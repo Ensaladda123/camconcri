@@ -9,64 +9,37 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         body { font-family: 'Lexend', sans-serif; margin: 0; background-color: #f3f4f6; display: flex; justify-content: center; }
-        
-        /* Contenedor Celular Fijo */
-        #app-viewport { 
-            width: 100%; max-width: 414px; height: 100vh; 
-            position: relative; background: white; overflow: hidden; 
-            display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.1); 
-        }
-
-        .view { 
-            width: 100%; height: 100%; display: flex; flex-direction: column; 
-            position: absolute; top: 0; left: 0; background: white; z-index: 10; 
-        }
-
+        #app-viewport { width: 100%; max-width: 414px; height: 100vh; position: relative; background: white; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.1); }
+        .view { width: 100%; height: 100%; display: flex; flex-direction: column; position: absolute; top: 0; left: 0; background: white; z-index: 10; }
         .scroll-area { flex: 1; overflow-y: auto; padding-bottom: 90px; }
-
-        /* Estilo de los Inputs */
-        input, select { border: 1px solid #e5e7eb !important; border-radius: 16px !important; padding: 14px !important; font-size: 14px !important; outline: none; }
-        input:focus { border-color: #2563eb !important; background-color: #f8fafc; }
-
-        /* Menú Inferior Fijo */
-        nav { 
-            position: absolute; bottom: 0; width: 100%; height: 75px; 
-            background: white; border-top: 1px solid #f0f0f0; 
-            display: flex; justify-content: space-around; align-items: center; z-index: 50; 
-        }
-        nav button { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #94a3b8; transition: 0.3s; }
-        nav button.active { color: #2563eb; }
-        nav button span { font-size: 24px; }
-        nav b { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* Botón Flotante */
-        #btn-floating { 
-            position: absolute; bottom: 95px; right: 20px; z-index: 100; 
-            width: 56px; height: 56px; border-radius: 50%; 
-            background: #2563eb; color: white; display: flex; 
-            align-items: center; justify-content: center; shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
-        }
-
         .hidden { display: none !important; }
-        .role-card { border: 2px solid #f3f4f6; transition: 0.3s; cursor: pointer; }
+        
+        /* Nav Inferior Fijo */
+        nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: white; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
+        nav button { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #94a3b8; border: none; background: none; cursor: pointer; }
+        nav button.active { color: #2563eb; }
+        nav b { font-size: 10px; text-transform: uppercase; }
+
+        input, select { border: 1px solid #e5e7eb !important; border-radius: 16px !important; padding: 14px !important; outline: none; width: 100%; }
+        .role-card { border: 2px solid #f3f4f6; border-radius: 20px; padding: 16px; text-align: center; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .role-card.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
     </style>
 </head>
 <body>
+
     <div id="app-viewport">
         
-        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center space-y-8">
-            <div class="text-center">
+        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center space-y-6">
+            <div class="text-center mb-4">
                 <span class="material-symbols-outlined text-blue-600 text-7xl">auto_stories</span>
                 <h1 class="text-3xl font-bold italic mt-2">Caminando con Cristo</h1>
-                <p class="text-gray-400 text-xs font-bold uppercase mt-2">Inicia tu trayecto espiritual</p>
             </div>
 
             <div class="w-full space-y-3">
-                <button onclick="loginSocial('Google')" class="w-full flex items-center justify-center gap-3 border border-gray-200 py-4 rounded-2xl font-bold text-sm hover:bg-gray-50 transition-all">
+                <button onclick="loginSocial('Google')" class="w-full flex items-center justify-center gap-3 border border-gray-200 py-4 rounded-2xl font-bold text-sm">
                     <img src="https://www.google.com/favicon.ico" class="w-5"> Continuar con Google
                 </button>
-                <button onclick="loginSocial('Apple')" class="w-full flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-bold text-sm hover:opacity-90 transition-all">
+                <button onclick="loginSocial('Apple')" class="w-full flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-bold text-sm">
                     <span class="material-symbols-outlined">apple</span> Continuar con Apple
                 </button>
                 
@@ -76,96 +49,163 @@
                     <div class="flex-1 h-[1px] bg-gray-100"></div>
                 </div>
 
-                <input type="email" id="auth-email" placeholder="Correo electrónico" class="w-full">
-                <button onclick="checkEmail()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 active:scale-95 transition-all">Ingresar</button>
+                <input type="email" id="auth-email" placeholder="Correo electrónico">
+                <button onclick="iniciar()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Ingresar</button>
             </div>
         </section>
 
         <section id="view-setup" class="view hidden p-8">
-            <h2 class="text-2xl font-bold mb-2">Cuentanos de ti</h2>
-            <p class="text-gray-400 text-sm mb-6">Para asignarte un grupo ministerial.</p>
+            <h2 class="text-2xl font-bold">Crea tu Perfil</h2>
+            <p class="text-gray-400 text-sm mb-6">Solo te tomará un minuto.</p>
             
             <div class="scroll-area space-y-4">
-                <input type="text" id="setup-name" placeholder="Nombre completo" class="w-full">
-                <input type="tel" id="setup-phone" placeholder="Número de WhatsApp" class="w-full">
+                <input type="text" id="setup-name" placeholder="Nombre completo">
+                <input type="tel" id="setup-phone" placeholder="WhatsApp">
                 
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1 mt-4">¿Cuál es tu función?</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1 mt-4">¿Cuál es tu rol?</p>
                 <div class="grid grid-cols-2 gap-3">
-                    <div onclick="selectRole('alumno')" id="card-alumno" class="role-card p-4 rounded-2xl text-center font-bold text-sm">Alumno</div>
-                    <div onclick="selectRole('maestro')" id="card-maestro" class="role-card p-4 rounded-2xl text-center font-bold text-sm">Maestro</div>
+                    <div onclick="selectRole('alumno')" id="card-alumno" class="role-card">Alumno</div>
+                    <div onclick="selectRole('maestro')" id="card-maestro" class="role-card">Maestro</div>
                 </div>
 
-                <div id="extra-alumno" class="hidden animate-fade-in">
-                    <select id="setup-maestro" class="w-full">
+                <div id="extra-alumno" class="hidden">
+                    <select id="setup-maestro">
                         <option value="">Selecciona tu maestro...</option>
                         <option value="Pastor Juan">Pastor Juan Carlos</option>
+                        <option value="Maestra Elena">Maestra Elena</option>
                     </select>
                 </div>
 
                 <div id="extra-maestro" class="hidden">
-                    <input type="password" id="setup-code" placeholder="Código de Maestro" class="w-full">
+                    <input type="password" id="setup-code" placeholder="Código de Maestro (1234)">
                 </div>
 
-                <button onclick="completeRegistration()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl mt-6">Empezar ahora</button>
+                <button onclick="finalizarRegistro()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl mt-6">Comenzar</button>
             </div>
         </section>
 
         <section id="view-home" class="view hidden">
-            <header class="p-6 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 border-b z-20">
+            <header class="p-6 border-b bg-white flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div id="avatar-circle" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg"></div>
+                    <div id="avatar" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold"></div>
                     <div>
-                        <p id="user-name-display" class="font-bold text-sm text-gray-800 leading-none mb-1"></p>
-                        <p id="user-role-display" class="text-[9px] text-gray-400 font-bold uppercase tracking-tighter"></p>
+                        <p id="user-name" class="font-bold text-sm leading-none"></p>
+                        <p id="user-role" class="text-[9px] text-gray-400 font-bold uppercase mt-1"></p>
                     </div>
                 </div>
-                <button onclick="logout()" class="text-gray-300 hover:text-red-500 transition-all"><span class="material-symbols-outlined">logout</span></button>
+                <button onclick="cerrarSesion()" class="text-gray-300"><span class="material-symbols-outlined">logout</span></button>
             </header>
-
-            <div id="books-container" class="scroll-area p-6 space-y-4">
-                </div>
+            <div id="books-list" class="scroll-area p-6 space-y-4"></div>
         </section>
 
-        <section id="view-community" class="view hidden">
-            <header class="p-6 bg-white border-b sticky top-0 z-20">
-                <h2 class="text-2xl font-bold text-gray-800">Muro Comunitario</h2>
-                <div class="bg-gray-100 px-4 py-2 rounded-2xl flex items-center mt-3">
-                    <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
-                    <input type="text" placeholder="Buscar consultas..." class="bg-transparent border-none p-0 ml-2 w-full text-sm">
-                </div>
-            </header>
-            <div id="forum-list" class="scroll-area p-6 space-y-4"></div>
-            <button id="btn-floating" onclick="openPostModal()"><span class="material-symbols-outlined">add_comment</span></button>
-        </section>
-
-        <section id="view-profile" class="view hidden p-8">
-            <h2 class="text-2xl font-bold mb-8">Mi Perfil</h2>
-            <div class="flex flex-col items-center space-y-4">
-                <div id="profile-big-avatar" class="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center text-3xl text-white font-bold shadow-2xl"></div>
-                <div class="w-full space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-2xl"><label class="text-[10px] font-bold text-gray-400 uppercase">Nombre</label><p id="p-name" class="font-bold"></p></div>
-                    <div class="bg-gray-50 p-4 rounded-2xl"><label class="text-[10px] font-bold text-gray-400 uppercase">WhatsApp</label><p id="p-phone" class="font-bold"></p></div>
-                </div>
-            </div>
-        </section>
-
-        <nav id="main-nav" class="hidden">
-            <button onclick="navTo('view-home')" id="nav-home" class="active">
-                <span class="material-symbols-outlined">auto_stories</span>
-                <b>Libros</b>
+        <nav id="bottom-nav" class="hidden">
+            <button onclick="cambiarPantalla('view-home')" id="nav-home" class="active">
+                <span class="material-symbols-outlined">auto_stories</span><b>Libros</b>
             </button>
-            <button onclick="navTo('view-community')" id="nav-community">
-                <span class="material-symbols-outlined">groups</span>
-                <b>Comunidad</b>
+            <button onclick="alert('Próximamente Comunidad')" id="nav-comunidad">
+                <span class="material-symbols-outlined">groups</span><b>Comunidad</b>
             </button>
-            <button onclick="navTo('view-profile')" id="nav-profile">
-                <span class="material-symbols-outlined">person</span>
-                <b>Perfil</b>
+            <button onclick="cambiarPantalla('view-profile')" id="nav-perfil">
+                <span class="material-symbols-outlined">person</span><b>Perfil</b>
             </button>
         </nav>
 
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // --- LOGICA DE ESTADO ---
+        let usuario = JSON.parse(localStorage.getItem('sesion_cristo')) || null;
+        let rolSeleccionado = "";
+
+        // Al cargar, verificar si hay sesión
+        window.onload = () => {
+            if (usuario) {
+                mostrarAppPrincipal();
+            } else {
+                cambiarPantalla('view-auth');
+            }
+        };
+
+        // --- FUNCIONES DE NAVEGACIÓN ---
+        function cambiarPantalla(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        // --- LOGICA DE REGISTRO ---
+        function iniciar() {
+            const email = document.getElementById('auth-email').value;
+            if(!email.includes('@')) return alert("Ingresa un correo válido");
+            cambiarPantalla('view-setup');
+        }
+
+        function loginSocial(red) {
+            // Simulación rápida: mandamos al setup
+            cambiarPantalla('view-setup');
+        }
+
+        function selectRole(rol) {
+            rolSeleccionado = rol;
+            document.getElementById('card-alumno').className = "role-card " + (rol === 'alumno' ? 'active' : '');
+            document.getElementById('card-maestro').className = "role-card " + (rol === 'maestro' ? 'active' : '');
+            
+            document.getElementById('extra-alumno').classList.toggle('hidden', rol !== 'alumno');
+            document.getElementById('extra-maestro').classList.toggle('hidden', rol !== 'maestro');
+        }
+
+        function finalizarRegistro() {
+            const nombre = document.getElementById('setup-name').value;
+            const tel = document.getElementById('setup-phone').value;
+            
+            if(!nombre || !tel || !rolSeleccionado) return alert("Por favor completa los campos");
+
+            if(rolSeleccionado === 'maestro' && document.getElementById('setup-code').value !== '1234') {
+                return alert("Código de maestro incorrecto");
+            }
+
+            usuario = {
+                nombre: nombre,
+                whatsapp: tel,
+                rol: rolSeleccionado,
+                email: document.getElementById('auth-email').value
+            };
+
+            localStorage.setItem('sesion_cristo', JSON.stringify(usuario));
+            mostrarAppPrincipal();
+        }
+
+        // --- APP INTERNA ---
+        function mostrarAppPrincipal() {
+            cambiarPantalla('view-home');
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            
+            // Actualizar textos
+            document.getElementById('user-name').innerText = usuario.nombre;
+            document.getElementById('user-role').innerText = usuario.rol;
+            document.getElementById('avatar').innerText = usuario.nombre[0].toUpperCase();
+
+            renderLibros();
+        }
+
+        function renderLibros() {
+            const libros = [
+                { id: 1, titulo: 'Libro 1: Fundamentos', color: 'bg-blue-600' },
+                { id: 2, titulo: 'Libro 2: Oración', color: 'bg-gray-300' }
+            ];
+            const container = document.getElementById('books-list');
+            container.innerHTML = libros.map(l => `
+                <div class="bg-white p-5 rounded-3xl border border-gray-100 flex items-center gap-4 shadow-sm">
+                    <div class="w-12 h-12 ${l.color} rounded-2xl flex items-center justify-center text-white font-bold">${l.id}</div>
+                    <p class="font-bold text-gray-800 flex-1">${l.titulo}</p>
+                    <span class="material-symbols-outlined text-gray-300">chevron_right</span>
+                </div>
+            `).join('');
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('sesion_cristo');
+            location.reload();
+        }
+    </script>
 </body>
 </html>
