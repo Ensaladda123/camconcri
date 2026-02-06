@@ -80,14 +80,14 @@
         </section>
 
         <section id="view-devocional" class="view hidden">
-            <header class="p-6 border-b flex items-center sticky top-0 bg-white z-10">
+            <header class="p-6 border-b flex items-center bg-white sticky top-0 z-10">
                 <button onclick="cambiarVista('view-capitulos')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h3 id="dev-titulo" class="font-bold text-sm text-gray-700">Lección</h3>
             </header>
             <div class="p-6 overflow-y-auto flex-1 pb-10">
-                <div class="bg-blue-50 p-6 rounded-3xl mb-8">
+                <div class="bg-blue-50 p-6 rounded-3xl mb-8 border border-blue-100">
                     <h4 class="font-bold text-blue-800 mb-2">Devocional</h4>
-                    <p class="text-gray-600 text-sm italic leading-relaxed">"Porque de tal manera amó Dios al mundo..." (Juan 3:16)</p>
+                    <p class="text-gray-600 text-sm italic">"Porque de tal manera amó Dios al mundo..." (Juan 3:16)</p>
                 </div>
                 <div>
                     <label class="font-bold text-sm text-gray-800 block mb-2">1. ¿Qué comprendes de este pasaje?</label>
@@ -109,7 +109,7 @@
                 <h3 class="font-bold text-xl mb-4 text-gray-800">Mi Nómina</h3>
                 <div class="bg-white p-4 rounded-2xl border flex items-center justify-between card-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">M</div>
+                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 font-bold">M</div>
                         <div>
                             <p class="font-bold text-sm text-gray-700">Martin Moreno</p>
                             <p class="text-[10px] text-orange-500 font-bold uppercase">Pendiente</p>
@@ -124,49 +124,33 @@
         <section id="view-corregir" class="view hidden">
             <header class="p-6 border-b flex items-center bg-white sticky top-0 z-10">
                 <button onclick="cambiarVista('view-home-maestro')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <div>
-                    <h3 class="font-bold text-sm text-gray-800 uppercase">Martin Moreno</h3>
-                    <p class="text-[10px] text-blue-600 font-bold">LIBRO 1 - CAPÍTULO 1</p>
-                </div>
+                <div><h3 class="font-bold text-sm uppercase">Martin Moreno</h3><p class="text-[10px] text-blue-600 font-bold">LIBRO 1 - CAPÍTULO 1</p></div>
             </header>
             <div class="p-6 overflow-y-auto flex-1 pb-10 scroll-hide">
                 <div class="mb-8 p-4 bg-gray-50 rounded-3xl border border-gray-100">
                     <p class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Pregunta 1</p>
                     <p class="text-sm font-bold text-gray-700 mb-4">¿Qué comprendes de este pasaje?</p>
-                    <div class="bg-white p-4 rounded-2xl text-sm italic text-gray-600 border mb-4">
-                        "Entiendo que el amor de Dios es infinito porque dio a su hijo por nosotros para darnos vida."
-                    </div>
-                    
+                    <div class="bg-white p-4 rounded-2xl text-sm italic text-gray-600 border mb-4">"Entiendo que el amor de Dios es infinito..."</div>
                     <div class="flex gap-3">
-                        <button onclick="marcarPregunta(1, true)" id="btn-check-1" class="flex-1 py-3 rounded-2xl border-2 border-gray-100 text-gray-300 flex justify-center transition-all"><span class="material-symbols-outlined">check_circle</span></button>
-                        <button onclick="marcarPregunta(1, false)" id="btn-x-1" class="flex-1 py-3 rounded-2xl border-2 border-gray-100 text-gray-300 flex justify-center transition-all"><span class="material-symbols-outlined">cancel</span></button>
+                        <button onclick="marcarPregunta(1, true)" id="btn-check-1" class="flex-1 py-3 rounded-2xl border-2 border-gray-100 text-gray-300 flex justify-center"><span class="material-symbols-outlined">check_circle</span></button>
+                        <button onclick="marcarPregunta(1, false)" id="btn-x-1" class="flex-1 py-3 rounded-2xl border-2 border-gray-100 text-gray-300 flex justify-center"><span class="material-symbols-outlined">cancel</span></button>
                     </div>
-                    <textarea id="feedback-1" class="hidden w-full mt-4 p-4 bg-orange-50 border border-orange-100 rounded-2xl text-xs outline-none" placeholder="Escribe aquí tu orientación para el alumno..."></textarea>
+                    <textarea id="feedback-1" class="hidden w-full mt-4 p-4 bg-orange-50 border border-orange-100 rounded-2xl text-xs outline-none" placeholder="Orientación..."></textarea>
                 </div>
-
-                <button onclick="finalizarCorreccion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-100">Guardar y Finalizar</button>
+                <button onclick="finalizarCorreccion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Guardar y Finalizar</button>
             </div>
         </section>
 
         <section id="view-comunidad" class="view hidden">
-            <header class="p-6 border-b flex items-center">
-                <button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h3 class="font-bold text-lg">Comunidad</h3>
-            </header>
-            <div class="p-12 text-center text-gray-400">
-                <span class="material-symbols-outlined text-6xl opacity-20">forum</span>
-                <p class="mt-4">El foro estará disponible pronto.</p>
-            </div>
+            <header class="p-6 border-b flex items-center"><button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button><h3 class="font-bold text-lg">Comunidad</h3></header>
+            <div class="p-12 text-center text-gray-400"><span class="material-symbols-outlined text-6xl opacity-20">forum</span><p class="mt-4">Pronto...</p></div>
         </section>
 
         <section id="view-perfil" class="view hidden">
-            <header class="p-6 border-b flex items-center">
-                <button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h3 class="font-bold text-lg">Mi Perfil</h3>
-            </header>
+            <header class="p-6 border-b flex items-center"><button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button><h3 class="font-bold text-lg">Mi Perfil</h3></header>
             <div id="perfil-body" class="p-8 flex flex-col items-center">
-                <div id="perf-av" class="w-24 h-24 bg-gray-200 rounded-full mb-4 overflow-hidden flex items-center justify-center text-white text-3xl font-bold"></div>
-                <h4 id="perf-name" class="font-bold text-xl uppercase"></h4>
+                <div id="perf-av" class="w-24 h-24 bg-gray-200 rounded-full mb-4 flex items-center justify-center text-white text-3xl font-bold overflow-hidden"></div>
+                <h4 id="perf-name" class="font-bold text-xl uppercase text-center"></h4>
                 <p id="perf-rol" class="text-blue-600 font-bold text-xs uppercase bg-blue-50 px-3 py-1 rounded-full mt-2"></p>
                 <button onclick="cerrarSesion()" class="mt-12 text-red-500 font-bold border border-red-100 px-6 py-2 rounded-xl">Cerrar Sesión</button>
             </div>
@@ -175,8 +159,8 @@
     </div>
 
     <script>
-        // TODA LA LÓGICA BASE SE MANTIENE
-        let u = { email: "", rol: "", nombre: "", foto: null };
+        // OBJETO GLOBAL (IMPORTANTE PARA QUE NO SE CONGELE)
+        let u = JSON.parse(localStorage.getItem('user_biblico_final')) || { email: "", rol: "", nombre: "", foto: null };
 
         function cambiarVista(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
@@ -185,6 +169,7 @@
 
         function volverNav() { cambiarVista(u.rol === 'alumno' ? 'view-home-alumno' : 'view-home-maestro'); }
 
+        // ESTA FUNCIÓN FUE LA QUE FALLÓ: AHORA GUARDA EL EMAIL ANTES DE SEGUIR
         function validarRegistro() { 
             const m = document.getElementById('input-email').value;
             if(!m) return alert("Email vacío");
@@ -196,6 +181,14 @@
             const fr = new FileReader();
             fr.onload = () => {
                 u.foto = fr.result;
-                document.getElementById('avatar-preview').innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover">`;
+                document.getElementById('avatar-preview').innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`;
             };
-            fr.readAsData
+            fr.readAsDataURL(e.target.files[0]);
+        }
+
+        function elegirRol(r) {
+            u.rol = r;
+            document.getElementById('btn-alumno').className = `border-2 p-4 rounded-xl font-bold transition-all ${r==='alumno'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
+            document.getElementById('btn-maestro').className = `border-2 p-4 rounded-xl font-bold transition-all ${r==='maestro'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
+            document.getElementById('opcion-alumno').classList.toggle('hidden', r !== 'alumno');
+            document.getElementById('opcion-maestro').classList.toggle('hidden', r !== 'ma
