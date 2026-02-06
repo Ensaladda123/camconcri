@@ -1,109 +1,85 @@
-// --- ESTADO DE LA APP ---
-let currentUser = JSON.parse(localStorage.getItem('user_session')) || null;
-
-const BOOKS = [
-    { id: 1, title: 'Libro 1: Fundamentos de Fe', status: 'disponible', color: 'bg-blue-600' },
-    { id: 2, title: 'Libro 2: Vida de Oración', status: 'bloqueado', color: 'bg-gray-300' },
-    { id: 3, title: 'Libro 3: El Carácter de Cristo', status: 'bloqueado', color: 'bg-gray-300' }
-];
-
-// --- AL INICIAR LA APP ---
-window.onload = () => {
-    if (currentUser) {
-        showMainApp();
-    } else {
-        showView('view-auth');
-    }
+// script.js mejorado
+let userData = {
+    name: "",
+    phone: "",
+    role: "",
+    maestro: "",
+    isSetupComplete: false
 };
 
-// --- NAVEGACIÓN ---
+const BOOKS_DATA = [
+    { id: 1, title: 'Libro 1: Fundamentos', chapters: 5, status: 'disponible', color: 'bg-blue-600' },
+    { id: 2, title: 'Libro 2: La Oración', chapters: 4, status: 'bloqueado', color: 'bg-gray-400' },
+    // Agregaremos los 6 libros aquí
+];
+
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
     document.getElementById(viewId).classList.remove('hidden');
 }
 
-function navTo(viewId) {
-    showView(viewId);
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById('nav-' + viewId.split('-')[1]).classList.add('active');
+function goToProfile() {
+    showView('view-profile-setup');
 }
 
-// --- LOGICA DE AUTH ---
-function loginSocial(provider) {
-    // Simulación de login exitoso
-    const email = document.getElementById('auth-email').value || `usuario_${provider.toLowerCase()}@test.com`;
-    if(!email.includes('@')) return alert("Por favor, escribe un correo para simular el acceso.");
+function setProfileRole(role) {
+    userData.role = role;
+    // Estética de botones
+    document.getElementById('btn-role-alumno').className = role === 'alumno' ? 'p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl font-bold' : 'p-4 border-2 border-gray-100 rounded-2xl font-bold';
+    document.getElementById('btn-role-maestro').className = role === 'maestro' ? 'p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl font-bold' : 'p-4 border-2 border-gray-100 rounded-2xl font-bold';
     
-    // Si ya existe en memoria, entra directo, si no, va a setup
-    if(currentUser) showMainApp();
-    else showView('view-setup');
+    // Mostrar campos extra
+    document.getElementById('setup-alumno-extra').classList.toggle('hidden', role !== 'alumno');
+    document.getElementById('setup-maestro-extra').classList.toggle('hidden', role !== 'maestro');
 }
 
-function checkEmail() {
-    const email = document.getElementById('auth-email').value;
-    if(!email.includes('@')) return alert("Correo no válido");
-    showView('view-setup');
-}
-
-let tempRole = "";
-function selectRole(role) {
-    tempRole = role;
-    document.getElementById('card-alumno').className = "role-card p-4 rounded-2xl text-center font-bold text-sm " + (role === 'alumno' ? 'active' : '');
-    document.getElementById('card-maestro').className = "role-card p-4 rounded-2xl text-center font-bold text-sm " + (role === 'maestro' ? 'active' : '');
-    
-    document.getElementById('extra-alumno').classList.toggle('hidden', role !== 'alumno');
-    document.getElementById('extra-maestro').classList.toggle('hidden', role !== 'maestro');
-}
-
-function completeRegistration() {
+function finishSetup() {
     const name = document.getElementById('setup-name').value;
     const phone = document.getElementById('setup-phone').value;
     
-    if(!name || !phone || !tempRole) return alert("Completa todos los datos, por favor.");
-    
-    // Crear objeto de usuario
-    currentUser = {
-        name: name,
-        phone: phone,
-        role: tempRole,
-        email: document.getElementById('auth-email').value,
-        maestro: document.getElementById('setup-maestro').value
-    };
+    if (!name || !phone || !userData.role) {
+        alert("Por favor completa todos los campos obligatorios (*)");
+        return;
+    }
 
-    // GUARDAR SESIÓN (Para que no se borre al refrescar)
-    localStorage.setItem('user_session', JSON.stringify(currentUser));
-    
-    showMainApp();
-}
+    if (userData.role === 'maestro') {
+        const code = document.getElementById('maestro-code').value;
+        if (code !== "1234") {
+            alert("Código Ministerial Inválido");
+            return;
+        }
+    } else {
+        const maestro = document.getElementById('select-maestro').value;
+        if (!maestro) {
+            alert("Debes elegir un maestro para que corrija tus tareas");
+            return;
+        }
+    }
 
-// --- LÓGICA DE LA APP DENTRO ---
-function showMainApp() {
-    showView('view-home');
-    document.getElementById('main-nav').classList.remove('hidden');
-    updateUI();
-    renderBooks();
-}
-
-function updateUI() {
-    const initial = currentUser.name[0].toUpperCase();
-    document.getElementById('avatar-circle').innerText = initial;
-    document.getElementById('profile-big-avatar').innerText = initial;
-    document.getElementById('user-name-display').innerText = currentUser.name;
-    document.getElementById('user-role-display').innerText = currentUser.role;
+    // Guardar datos y entrar
+    userData.name = name;
+    document.getElementById('display-name').innerText = name;
+    document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
     
-    // Perfil
-    document.getElementById('p-name').innerText = currentUser.name;
-    document.getElementById('p-phone').innerText = currentUser.phone;
+    if (userData.role === 'alumno') {
+        renderBooks();
+        showView('view-student-home');
+    } else {
+        alert("¡Bienvenido Maestro! Cargando panel...");
+        // Aquí iría el panel de maestro
+    }
 }
 
 function renderBooks() {
     const container = document.getElementById('books-container');
-    container.innerHTML = BOOKS.map(b => `
-        <div class="bg-white p-6 rounded-3xl border border-gray-100 flex items-center gap-4 shadow-sm active:scale-95 transition-all">
-            <div class="w-14 h-14 ${b.color} rounded-2xl flex items-center justify-center text-white font-bold italic shadow-inner">${b.id}</div>
+    container.innerHTML = BOOKS_DATA.map(book => `
+        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 ${book.status === 'bloqueado' ? 'opacity-50' : ''}">
+            <div class="w-14 h-14 ${book.color} rounded-2xl flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">${book.status === 'bloqueado' ? 'lock' : 'book'}</span>
+            </div>
             <div class="flex-1">
-                <p class="font-bold text-gray-800">${b.title}</p>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">${b.status}</p>
+                <h4 class="font-bold text-gray-900">${book.title}</h4>
+                <p class="text-xs text-gray-400">${book.chapters} Capítulos</p>
             </div>
             <span class="material-symbols-outlined text-gray-300">chevron_right</span>
         </div>
@@ -111,6 +87,5 @@ function renderBooks() {
 }
 
 function logout() {
-    localStorage.removeItem('user_session');
-    location.reload();
+    location.reload(); // Reinicia la app para el ejemplo
 }
