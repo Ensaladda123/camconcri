@@ -8,252 +8,295 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Lexend', sans-serif; background-color: #f3f4f6; overflow-x: hidden; }
-        .view { min-height: 100vh; background: white; display: flex; flex-direction: column; width: 100%; }
+        body { font-family: 'Lexend', sans-serif; background-color: #f3f4f6; }
+        .view { min-height: 100vh; background: white; display: flex; flex-direction: column; width: 100%; position: relative; }
         .hidden { display: none !important; }
-        input[type="file"] { display: none; }
         .card-shadow { box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        input[type="file"] { display: none; }
+        .scroll-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="flex justify-center">
 
     <div id="app-container" class="w-full max-w-md bg-white min-h-screen shadow-2xl relative overflow-hidden flex flex-col">
 
-        <section id="view-auth" class="view p-8 flex flex-col justify-center items-center fade-in">
+        <section id="view-auth" class="view p-8 flex flex-col justify-center items-center">
             <div class="mb-8 text-center">
                 <span class="material-symbols-outlined text-blue-600 text-7xl">account_circle</span>
                 <h1 class="text-2xl font-bold mt-2 text-gray-800">Crear Cuenta</h1>
-                <p class="text-gray-400 text-sm">Únete a la comunidad espiritual</p>
+                <p class="text-gray-400 text-sm">Estudio Bíblico Digital</p>
             </div>
-
             <div class="w-full space-y-4">
-                <input type="email" id="input-email" placeholder="Correo electrónico" 
-                    class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500 transition-colors">
-                
-                <input type="password" id="input-password" placeholder="Crear contraseña" 
-                    class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500 transition-colors">
-
-                <button onclick="validarRegistro()" 
-                    class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg active:scale-95 transition-transform">
-                    Registrarse Manualmente
-                </button>
+                <input type="email" id="input-email" placeholder="Correo electrónico" class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500">
+                <input type="password" id="input-password" placeholder="Contraseña" class="w-full bg-blue-50/50 border border-blue-100 p-4 rounded-xl outline-none focus:border-blue-500">
+                <button onclick="validarRegistro()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200">Registrarse</button>
             </div>
         </section>
 
-        <section id="view-setup" class="view hidden p-8 flex flex-col fade-in overflow-y-auto">
-            <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">Completa tu Perfil</h2>
-
+        <section id="view-setup" class="view hidden p-8 flex flex-col">
+            <div class="flex items-center mb-6">
+                <button onclick="cambiarVista('view-auth')" class="text-gray-400 mr-2"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h2 class="text-xl font-bold">Tu Perfil</h2>
+            </div>
             <div class="flex flex-col items-center mb-6">
-                <label for="file-upload" class="relative cursor-pointer">
-                    <div id="avatar-preview" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
-                        <span class="material-symbols-outlined text-gray-400 text-4xl">add_a_photo</span>
-                    </div>
+                <label for="file-upload" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden cursor-pointer" id="avatar-preview">
+                    <span class="material-symbols-outlined text-gray-400 text-4xl">add_a_photo</span>
                 </label>
                 <input id="file-upload" type="file" accept="image/*" onchange="cargarFoto(event)">
-                <p class="text-xs text-blue-600 font-bold mt-2">Toca para subir foto</p>
+                <p class="text-[10px] font-bold text-blue-600 mt-2">SUBIR FOTO</p>
             </div>
-
-            <div class="space-y-4 pb-6">
-                <input type="text" id="setup-name" placeholder="Nombre completo" class="w-full bg-gray-50 border p-4 rounded-xl outline-none focus:border-blue-500">
-                <input type="tel" id="setup-phone" placeholder="WhatsApp (ej: +54...)" class="w-full bg-gray-50 border p-4 rounded-xl outline-none focus:border-blue-500">
-
-                <p class="text-xs font-bold text-gray-400 ml-1 mt-4">¿CUÁL ES TU ROL?</p>
+            <div class="space-y-4 flex-1 overflow-y-auto scroll-hide">
+                <input type="text" id="setup-name" placeholder="Nombre completo" class="w-full border p-4 rounded-xl outline-none focus:border-blue-500 bg-gray-50">
+                <input type="tel" id="setup-phone" placeholder="WhatsApp (ej: +54...)" class="w-full border p-4 rounded-xl outline-none focus:border-blue-500 bg-gray-50">
+                <p class="text-xs font-bold text-gray-400 ml-1">SELECCIONA TU ROL</p>
                 <div class="grid grid-cols-2 gap-3">
-                    <div onclick="elegirRol('alumno')" id="btn-alumno" class="border-2 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all">Alumno</div>
-                    <div onclick="elegirRol('maestro')" id="btn-maestro" class="border-2 p-4 rounded-xl text-center font-bold text-gray-400 cursor-pointer transition-all">Maestro</div>
+                    <button onclick="elegirRol('alumno')" id="btn-alumno" class="border-2 p-4 rounded-xl font-bold text-gray-400 transition-all">Alumno</button>
+                    <button onclick="elegirRol('maestro')" id="btn-maestro" class="border-2 p-4 rounded-xl font-bold text-gray-400 transition-all">Maestro</button>
                 </div>
-
-                <div id="opcion-alumno" class="hidden animate-fade-in bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <select id="select-maestro" class="w-full p-2 bg-white rounded-lg outline-none text-sm font-medium">
-                        <option value="">Selecciona tu Maestro...</option>
+                <div id="opcion-alumno" class="hidden">
+                    <select id="select-maestro" class="w-full p-4 bg-blue-50 rounded-xl outline-none border border-blue-100 font-medium">
+                        <option value="">Elegir Maestro asignado...</option>
                         <option value="Pastor Juan">Pastor Juan Carlos</option>
-                        <option value="Maestra Elena">Maestra Elena</option>
+                        <option value="Líder Elena">Líder Elena</option>
                     </select>
                 </div>
-
-                <div id="opcion-maestro" class="hidden animate-fade-in bg-orange-50 p-4 rounded-xl border border-orange-100">
-                    <input type="password" id="input-codigo" placeholder="Código de acceso (123)" class="w-full p-2 bg-white rounded-lg outline-none text-sm font-bold">
+                <div id="opcion-maestro" class="hidden">
+                    <input type="password" id="input-codigo" placeholder="Código de activación (123)" class="w-full p-4 bg-orange-50 rounded-xl border border-orange-100 outline-none">
                 </div>
             </div>
-
-            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-auto">
-                Confirmar y Entrar
-            </button>
+            <button onclick="guardarPerfil()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold mt-6 shadow-lg">Confirmar y Entrar</button>
         </section>
 
         <section id="view-home-alumno" class="view hidden">
-            <header class="p-6 flex items-center justify-between border-b">
+            <header class="p-6 border-b flex justify-between items-center bg-white">
                 <div class="flex items-center gap-3">
-                    <div id="home-av-alumno" class="w-10 h-10 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold"></div>
-                    <div>
-                        <p id="home-name-alumno" class="font-bold text-sm leading-none"></p>
-                        <p class="text-[10px] text-blue-500 font-bold uppercase mt-1">Alumno</p>
-                    </div>
+                    <div id="av-al" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold"></div>
+                    <p id="nm-al" class="font-bold text-sm text-gray-800"></p>
                 </div>
                 <button onclick="cerrarSesion()" class="text-gray-300"><span class="material-symbols-outlined">logout</span></button>
             </header>
-
-            <div class="p-6 flex-1 overflow-y-auto pb-24">
-                <h3 class="font-bold text-xl text-gray-800 mb-6">Mis Libros</h3>
+            <div class="p-6 flex-1 overflow-y-auto pb-24 scroll-hide">
+                <h3 class="font-bold text-xl mb-6 text-gray-800">Mis Libros</h3>
                 <div id="lista-libros" class="space-y-4"></div>
             </div>
-
-            <nav class="absolute bottom-0 w-full h-20 bg-white border-t flex items-center justify-around">
-                <div class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">auto_stories</span><span class="text-[10px] font-bold">Libros</span></div>
-                <div class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></div>
-                <div class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Perfil</span></div>
-            </nav>
+            <nav id="nav-alumno" class="absolute bottom-0 w-full h-20 bg-white border-t flex justify-around items-center z-20"></nav>
         </section>
 
-        <section id="view-libro-detalle" class="view hidden">
-            <header class="p-6 flex items-center border-b">
-                <button onclick="irAHomeAlumno()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h3 id="detalle-titulo" class="font-bold text-lg text-gray-800">Capítulos</h3>
+        <section id="view-capitulos" class="view hidden">
+            <header class="p-6 border-b flex items-center bg-white">
+                <button onclick="cambiarVista('view-home-alumno')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h3 id="cap-lib-titulo" class="font-bold text-lg text-gray-800 truncate">Capítulos</h3>
             </header>
-            <div id="lista-capitulos" class="p-6 space-y-3 overflow-y-auto flex-1"></div>
+            <div id="lista-caps" class="p-6 space-y-3 overflow-y-auto flex-1 scroll-hide"></div>
+        </section>
+
+        <section id="view-devocional" class="view hidden">
+            <header class="p-6 border-b flex items-center bg-white sticky top-0 z-10">
+                <button onclick="cambiarVista('view-capitulos')" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h3 id="dev-titulo" class="font-bold text-sm text-gray-700">Lección</h3>
+            </header>
+            <div class="p-6 overflow-y-auto flex-1 pb-10 scroll-hide">
+                <div class="bg-blue-50 p-6 rounded-[2rem] mb-8 border border-blue-100">
+                    <h4 class="font-bold text-blue-800 mb-2 flex items-center gap-2 text-sm">
+                        <span class="material-symbols-outlined text-sm">menu_book</span> DEVOCIONAL DEL DÍA
+                    </h4>
+                    <p class="text-gray-600 text-sm leading-relaxed italic">"Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito..." (Juan 3:16)</p>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="font-bold text-[13px] text-gray-800 block mb-2">1. ¿Qué comprendes de este pasaje?</label>
+                        <textarea class="w-full bg-gray-50 border border-gray-200 p-4 rounded-2xl h-24 outline-none focus:border-blue-500 text-sm" placeholder="Escribe aquí..."></textarea>
+                    </div>
+                </div>
+                <button onclick="alert('¡Enviado! Tu maestro revisará pronto.')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold mt-10 shadow-lg shadow-green-100">Enviar a Corregir</button>
+            </div>
         </section>
 
         <section id="view-home-maestro" class="view hidden">
-            <header class="p-6 flex items-center justify-between border-b bg-gray-50">
+            <header class="p-6 border-b flex justify-between items-center bg-gray-50">
                 <div class="flex items-center gap-3">
-                    <div id="home-av-maestro" class="w-10 h-10 bg-orange-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-lg">M</div>
-                    <p id="home-name-maestro" class="font-bold text-sm"></p>
+                    <div id="av-ma" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                    <p id="nm-ma" class="font-bold text-sm text-gray-800"></p>
                 </div>
                 <button onclick="cerrarSesion()" class="text-gray-300"><span class="material-symbols-outlined">logout</span></button>
             </header>
-            <div class="p-6">
-                <h3 class="font-bold text-xl text-gray-800 mb-4">Mis Alumnos</h3>
-                <div class="bg-white p-4 rounded-2xl border border-orange-100 flex items-center justify-between">
+            <div class="p-6 flex-1 overflow-y-auto pb-24 scroll-hide">
+                <h3 class="font-bold text-xl mb-4">Mi Nómina</h3>
+                <div class="bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between card-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-gray-100 rounded-full"></div>
-                        <div><p class="font-bold text-sm text-gray-700">Alumno de Prueba</p><p class="text-[10px] text-orange-500 font-bold uppercase">Pendiente</p></div>
+                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 font-bold">M</div>
+                        <div>
+                            <p class="font-bold text-sm text-gray-700">Martin Moreno</p>
+                            <p class="text-[10px] text-orange-500 font-bold uppercase tracking-tight">Pendiente de corrección</p>
+                        </div>
                     </div>
-                    <button class="bg-orange-500 text-white text-[10px] px-3 py-2 rounded-lg font-bold">CORREGIR</button>
+                    <button class="bg-blue-600 text-white text-[10px] px-3 py-2 rounded-lg font-bold">CORREGIR</button>
                 </div>
+            </div>
+            <nav id="nav-maestro" class="absolute bottom-0 w-full h-20 bg-white border-t flex justify-around items-center z-20"></nav>
+        </section>
+
+        <section id="view-comunidad" class="view hidden">
+            <header class="p-6 border-b flex items-center">
+                <button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h3 class="font-bold text-lg">Comunidad</h3>
+            </header>
+            <div class="p-12 text-center text-gray-400">
+                <span class="material-symbols-outlined text-6xl opacity-20">forum</span>
+                <p class="mt-4 font-medium">Próximamente: Foro de discusión para alumnos y maestros.</p>
+            </div>
+        </section>
+
+        <section id="view-perfil" class="view hidden">
+            <header class="p-6 border-b flex items-center">
+                <button onclick="volverNav()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h3 class="font-bold text-lg">Mi Perfil</h3>
+            </header>
+            <div id="perfil-body" class="p-8 flex flex-col items-center">
+                <div id="perf-av" class="w-24 h-24 bg-gray-200 rounded-full mb-4 overflow-hidden flex items-center justify-center text-white text-3xl font-bold"></div>
+                <h4 id="perf-name" class="font-bold text-xl">Nombre</h4>
+                <p id="perf-rol" class="text-blue-600 font-bold text-xs uppercase bg-blue-50 px-3 py-1 rounded-full mt-2"></p>
+                <button onclick="cerrarSesion()" class="mt-12 text-red-500 font-bold border border-red-100 px-6 py-2 rounded-xl">Cerrar Sesión</button>
             </div>
         </section>
 
     </div>
 
     <script>
-        let registro = { email: "", password: "", rol: "", nombre: "", telefono: "", foto: null, maestro: "" };
+        let u = { email: "", rol: "", nombre: "", foto: null };
 
-        // --- NAVEGACIÓN ---
-        function cambiarVista(to) {
+        function cambiarVista(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(to).classList.remove('hidden');
+            document.getElementById(id).classList.remove('hidden');
         }
 
-        // --- PASO 1: AUTH ---
-        function validarRegistro() {
-            const e = document.getElementById('input-email').value;
-            const p = document.getElementById('input-password').value;
-            if(!e || !p) return alert("Completa los datos");
-            registro.email = e;
-            registro.password = p;
-            cambiarVista('view-setup');
+        function volverNav() { cambiarVista(u.rol === 'alumno' ? 'view-home-alumno' : 'view-home-maestro'); }
+
+        function validarRegistro() { 
+            const mail = document.getElementById('input-email').value;
+            if(!mail) return alert("Ingresa un email");
+            u.email = mail; 
+            cambiarVista('view-setup'); 
         }
 
-        // --- PASO 2: PERFIL ---
-        function cargarFoto(event) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                registro.foto = e.target.result;
-                document.getElementById('avatar-preview').innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
+        function cargarFoto(e) {
+            const fr = new FileReader();
+            fr.onload = () => {
+                u.foto = fr.result;
+                document.getElementById('avatar-preview').innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`;
             };
-            reader.readAsDataURL(event.target.files[0]);
+            fr.readAsDataURL(e.target.files[0]);
         }
 
         function elegirRol(r) {
-            registro.rol = r;
-            document.getElementById('btn-alumno').className = `border-2 p-4 rounded-xl text-center font-bold transition-all ${r==='alumno'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
-            document.getElementById('btn-maestro').className = `border-2 p-4 rounded-xl text-center font-bold transition-all ${r==='maestro'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
-            
+            u.rol = r;
+            document.getElementById('btn-alumno').className = `border-2 p-4 rounded-xl font-bold transition-all ${r==='alumno'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
+            document.getElementById('btn-maestro').className = `border-2 p-4 rounded-xl font-bold transition-all ${r==='maestro'?'border-blue-600 bg-blue-50 text-blue-600':'text-gray-400 border-gray-100'}`;
             document.getElementById('opcion-alumno').classList.toggle('hidden', r !== 'alumno');
             document.getElementById('opcion-maestro').classList.toggle('hidden', r !== 'maestro');
         }
 
         function guardarPerfil() {
             const n = document.getElementById('setup-name').value;
-            const t = document.getElementById('setup-phone').value;
-            if(!n || !t || !registro.rol) return alert("Completa todo el perfil");
-
-            if(registro.rol === 'alumno' && !document.getElementById('select-maestro').value) return alert("Elige un maestro");
-            if(registro.rol === 'maestro' && document.getElementById('input-codigo').value !== '123') return alert("Código de maestro incorrecto");
-
-            registro.nombre = n;
-            registro.telefono = t;
-            localStorage.setItem('usuario_cristo_db', JSON.stringify(registro));
-            finalizarLogin();
+            if(!n || !u.rol) return alert("Completa los campos");
+            if(u.rol === 'maestro' && document.getElementById('input-codigo').value !== '123') return alert("Código incorrecto");
+            
+            u.nombre = n;
+            localStorage.setItem('user_biblico_v1', JSON.stringify(u));
+            iniciarApp();
         }
 
-        // --- PASO 3: ENTRAR ---
-        function finalizarLogin() {
-            if(registro.rol === 'alumno') {
-                document.getElementById('home-name-alumno').innerText = registro.nombre;
-                const av = document.getElementById('home-av-alumno');
-                if(registro.foto) av.innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
-                else av.innerText = registro.nombre[0];
+        function iniciarApp() {
+            const data = localStorage.getItem('user_biblico_v1');
+            if(!data) return;
+            u = JSON.parse(data);
+
+            // Actualizar Perfil
+            document.getElementById('perf-name').innerText = u.nombre;
+            document.getElementById('perf-rol').innerText = u.rol;
+            const pAv = document.getElementById('perf-av');
+            if(u.foto) pAv.innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover">`;
+            else pAv.innerText = u.nombre[0];
+
+            if(u.rol === 'alumno') {
+                document.getElementById('nm-al').innerText = u.nombre;
+                const av = document.getElementById('av-al');
+                if(u.foto) av.innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`;
+                else av.innerText = u.nombre[0];
                 renderLibros();
+                renderNav('nav-alumno', 'auto_stories');
                 cambiarVista('view-home-alumno');
             } else {
-                document.getElementById('home-name-maestro').innerText = registro.nombre;
+                document.getElementById('nm-ma').innerText = u.nombre;
+                const avM = document.getElementById('av-ma');
+                if(u.foto) avM.innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`;
+                renderNav('nav-maestro', 'dashboard');
                 cambiarVista('view-home-maestro');
             }
         }
 
-        const LIBROS_DATA = [
-            {id: 1, t: "Libro 1: Fundamentos de Fe", c: 5, status: "disponible"},
-            {id: 2, t: "Libro 2: Vida de Oración", c: 4, status: "bloqueado"},
-            {id: 3, t: "Libro 3: Carácter de Cristo", c: 6, status: "bloqueado"}
+        function renderNav(id, activeIcon) {
+            const nav = document.getElementById(id);
+            const menu = [
+                { icon: u.rol === 'alumno' ? 'auto_stories' : 'dashboard', label: u.rol === 'alumno' ? 'Libros' : 'Nómina', view: u.rol === 'alumno' ? 'view-home-alumno' : 'view-home-maestro' },
+                { icon: 'groups', label: 'Comunidad', view: 'view-comunidad' },
+                { icon: 'account_circle', label: 'Perfil', view: 'view-perfil' }
+            ];
+            nav.innerHTML = menu.map(m => `
+                <button onclick="cambiarVista('${m.view}')" class="flex flex-col items-center ${m.icon === activeIcon ? 'text-blue-600' : 'text-gray-300'}">
+                    <span class="material-symbols-outlined">${m.icon}</span>
+                    <span class="text-[10px] font-bold">${m.label}</span>
+                </button>
+            `).join('');
+        }
+
+        const LIBROS = [
+            { id: 1, t: "Libro 1: Fundamentos de Fe", c: 5, status: "disponible" },
+            { id: 2, t: "Libro 2: Vida de Oración", c: 4, status: "bloqueado" },
+            { id: 3, t: "Libro 3: Carácter de Cristo", c: 6, status: "bloqueado" },
+            { id: 4, t: "Libro 4: El Espíritu Santo", c: 5, status: "bloqueado" },
+            { id: 5, t: "Libro 5: La Iglesia", c: 4, status: "bloqueado" },
+            { id: 6, t: "Libro 6: Evangelismo", c: 6, status: "bloqueado" }
         ];
 
         function renderLibros() {
             const container = document.getElementById('lista-libros');
-            container.innerHTML = LIBROS_DATA.map(l => `
-                <div onclick="verLibro(${l.id})" class="bg-white p-4 rounded-3xl border border-gray-100 flex items-center gap-4 card-shadow active:scale-95 transition-all ${l.status==='bloqueado'?'opacity-50':''}">
+            container.innerHTML = LIBROS.map(l => `
+                <div onclick="abrirCapitulos(${l.id})" class="bg-white p-4 rounded-3xl border flex items-center gap-4 card-shadow active:scale-95 transition-all ${l.status==='bloqueado'?'opacity-40':''}">
                     <div class="w-12 h-12 ${l.status==='bloqueado'?'bg-gray-200':'bg-blue-600'} rounded-2xl flex items-center justify-center text-white font-bold shadow-md">
-                        ${l.status==='bloqueado'?'<span class="material-symbols-outlined">lock</span>':l.id}
+                        ${l.status==='bloqueado'?'<span class="material-symbols-outlined text-sm">lock</span>':l.id}
                     </div>
                     <div class="flex-1">
                         <h4 class="font-bold text-gray-800 text-sm">${l.t}</h4>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase">${l.c} capítulos</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${l.c} capítulos</p>
                     </div>
-                    <span class="material-symbols-outlined text-gray-300">chevron_right</span>
                 </div>
             `).join('');
         }
 
-        function verLibro(id) {
-            const libro = LIBROS_DATA.find(l => l.id === id);
-            if(libro.status === 'bloqueado') return alert("Termina el libro anterior para desbloquear este.");
-            
-            document.getElementById('detalle-titulo').innerText = libro.t;
-            const container = document.getElementById('lista-capitulos');
+        function abrirCapitulos(id) {
+            const l = LIBROS.find(x => x.id === id);
+            if(l.status === 'bloqueado') return alert("Termina el libro anterior para desbloquear este.");
+            document.getElementById('cap-lib-titulo').innerText = l.t;
+            const container = document.getElementById('lista-caps');
             container.innerHTML = "";
-            for(let i=1; i<=libro.c; i++) {
+            for(let i=1; i<=l.c; i++) {
                 container.innerHTML += `
-                    <div onclick="alert('Ir a capítulo ${i}')" class="p-5 bg-gray-50 rounded-2xl flex justify-between items-center active:bg-blue-50">
-                        <span class="font-bold text-gray-700">Capítulo ${i}</span>
+                    <div onclick="abrirDevocional(${i})" class="p-5 bg-gray-50 rounded-2xl border flex justify-between items-center active:bg-blue-50 transition-colors">
+                        <span class="font-bold text-gray-700 text-sm">Capítulo ${i}</span>
                         <span class="material-symbols-outlined text-blue-600">play_circle</span>
                     </div>`;
             }
-            cambiarVista('view-libro-detalle');
+            cambiarVista('view-capitulos');
         }
 
-        function irAHomeAlumno() { cambiarVista('view-home-alumno'); }
+        function abrirDevocional(num) {
+            document.getElementById('dev-titulo').innerText = `Capítulo ${num}`;
+            cambiarVista('view-devocional');
+        }
 
-        function cerrarSesion() { localStorage.removeItem('usuario_cristo_db'); location.reload(); }
-
-        window.onload = () => {
-            const d = localStorage.getItem('usuario_cristo_db');
-            if(d) {
-                registro = JSON.parse(d);
-                finalizarLogin();
-            }
-        };
+        function cerrarSesion() { localStorage.clear(); location.reload(); }
+        window.onload = iniciarApp;
     </script>
 </body>
 </html>
