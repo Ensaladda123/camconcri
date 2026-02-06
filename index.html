@@ -2,177 +2,193 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Caminando con Cristo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         body { font-family: 'Lexend', sans-serif; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        /* Fix para el botón de comunidad que se veía cortado */
-        #btn-floating { bottom: 100px !important; right: 20px !important; z-index: 99; }
+        /* Forzamos el contenedor a parecer un celu siempre */
+        #app-viewport {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            margin: 0 auto;
+            position: relative;
+            background: white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-col: column;
+        }
+        .view {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: white;
+        }
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 100px; /* Espacio para que el nav no tape nada */
+        }
+        /* Botón flotante bien posicionado dentro del celu */
+        #btn-floating {
+            position: absolute;
+            bottom: 90px;
+            right: 20px;
+            z-index: 100;
+        }
+        nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 75px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 50;
+        }
     </style>
 </head>
-<body class="bg-gray-100 antialiased text-gray-800">
-    <div id="app-container" class="mx-auto max-w-md min-h-screen bg-white shadow-2xl overflow-hidden flex flex-col relative">
+<body class="bg-gray-200">
+
+    <div id="app-viewport">
         
-        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center min-h-screen space-y-6">
-            <div class="text-center mb-4">
+        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center space-y-6">
+            <div class="text-center">
                 <span class="material-symbols-outlined text-blue-600 text-6xl">auto_stories</span>
                 <h1 class="text-2xl font-bold mt-2 italic">Caminando con Cristo</h1>
             </div>
             <div class="w-full space-y-3">
-                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 border border-gray-200 py-3 rounded-2xl font-semibold text-sm hover:bg-gray-50">
-                    <img src="https://www.google.com/favicon.ico" class="w-4"> Continuar con Google
+                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 border border-gray-200 py-3 rounded-2xl font-semibold text-sm">
+                    <img src="https://www.google.com/favicon.ico" class="w-4"> Google
                 </button>
-                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 bg-black text-white py-3 rounded-2xl font-semibold text-sm">
-                    <span class="material-symbols-outlined text-lg">apple</span> Continuar con Apple
-                </button>
-                <div class="flex items-center gap-2 py-2">
-                    <div class="flex-1 h-[1px] bg-gray-100"></div>
-                    <span class="text-[10px] text-gray-400 font-bold uppercase">o usa tu correo</span>
-                    <div class="flex-1 h-[1px] bg-gray-100"></div>
-                </div>
-                <input type="email" id="auth-email" placeholder="Correo electrónico" class="w-full bg-gray-50 p-4 rounded-2xl outline-none text-sm">
-                <input type="password" id="auth-pass" placeholder="Contraseña" class="w-full bg-gray-50 p-4 rounded-2xl outline-none text-sm">
-                <button onclick="goToProfile()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Entrar / Registrarse</button>
+                <input type="email" id="auth-email" placeholder="Correo" class="w-full bg-gray-50 p-4 rounded-2xl outline-none text-sm">
+                <button onclick="goToProfile()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Entrar</button>
             </div>
         </section>
 
-        <section id="view-profile-setup" class="view hidden p-8 flex flex-col space-y-6 overflow-y-auto">
-            <div class="flex items-center gap-4">
+        <section id="view-profile-setup" class="view hidden p-8">
+            <div class="flex items-center gap-4 mb-6">
                 <button onclick="showView('view-auth')"><span class="material-symbols-outlined">arrow_back</span></button>
-                <h2 class="text-2xl font-bold text-gray-900">Tu Perfil</h2>
+                <h2 class="text-xl font-bold">Perfil</h2>
             </div>
-            <div class="flex flex-col items-center space-y-3">
-                <div class="relative">
-                    <div id="profile-preview" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden text-gray-400">
+            <div class="scroll-area space-y-6">
+                <div class="flex flex-col items-center">
+                    <div id="profile-preview" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden relative">
                         <span class="material-symbols-outlined text-4xl text-gray-300">person</span>
                     </div>
-                    <label class="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer shadow-lg">
-                        <span class="material-symbols-outlined text-sm">add_a_photo</span>
+                    <label class="mt-2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs cursor-pointer">
+                        Subir Foto
                         <input type="file" id="input-photo" accept="image/*" class="hidden" onchange="previewImage(this)">
                     </label>
                 </div>
-            </div>
-            <div class="space-y-4">
-                <input type="text" id="setup-name" placeholder="Nombre Completo *" class="w-full bg-gray-100 p-4 rounded-2xl outline-none text-sm">
-                <input type="tel" id="setup-phone" placeholder="Celular / WhatsApp *" class="w-full bg-gray-100 p-4 rounded-2xl outline-none text-sm">
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="setProfileRole('alumno')" id="btn-role-alumno" class="p-3 border-2 border-gray-100 rounded-xl font-bold text-sm">Alumno</button>
-                    <button onclick="setProfileRole('maestro')" id="btn-role-maestro" class="p-3 border-2 border-gray-100 rounded-xl font-bold text-sm">Maestro</button>
+                <input type="text" id="setup-name" placeholder="Nombre Completo" class="w-full bg-gray-100 p-4 rounded-2xl outline-none text-sm">
+                <input type="tel" id="setup-phone" placeholder="Celular" class="w-full bg-gray-100 p-4 rounded-2xl outline-none text-sm">
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setProfileRole('alumno')" id="btn-role-alumno" class="p-3 border rounded-xl font-bold text-xs">Alumno</button>
+                    <button onclick="setProfileRole('maestro')" id="btn-role-maestro" class="p-3 border rounded-xl font-bold text-xs">Maestro</button>
                 </div>
                 <div id="setup-alumno-extra" class="hidden">
                     <select id="select-maestro" class="w-full bg-gray-100 p-4 rounded-2xl outline-none text-sm">
-                        <option value="">Elegir mi Maestro...</option>
-                        <option value="Pastor Juan Carlos">Pastor Juan Carlos</option>
-                        <option value="Maestra Maria">Maestra María</option>
+                        <option value="">Elegir Maestro...</option>
+                        <option value="Pastor Juan">Pastor Juan</option>
                     </select>
                 </div>
-                <div id="setup-maestro-extra" class="hidden">
-                    <input type="password" id="maestro-code" placeholder="Código (1234)" class="w-full bg-gray-100 p-4 rounded-2xl outline-none text-sm border-2 border-blue-50">
-                </div>
+                <button onclick="finishSetup()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl">Guardar</button>
             </div>
-            <button onclick="finishSetup()" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-bold shadow-xl">Guardar Perfil</button>
         </section>
 
-        <section id="view-student-home" class="view hidden flex-1 flex flex-col pb-20">
-            <header class="p-6 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div id="user-avatar-home" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold overflow-hidden"></div>
-                    <div>
-                        <p id="display-name" class="font-bold text-sm"></p>
-                        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Alumno en formación</p>
-                    </div>
+        <section id="view-student-home" class="view hidden">
+            <header class="p-6 flex justify-between items-center bg-white border-b">
+                <div class="flex items-center gap-2">
+                    <div id="user-avatar-home" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white overflow-hidden font-bold"></div>
+                    <p id="display-name" class="font-bold text-sm"></p>
                 </div>
-                <button onclick="showView('view-user-details')" class="p-2 bg-gray-100 rounded-full text-gray-600">
-                    <span class="material-symbols-outlined text-sm">settings</span>
-                </button>
+                <button onclick="showView('view-user-details')"><span class="material-symbols-outlined text-gray-400">settings</span></button>
             </header>
-            <div id="books-container" class="p-6 space-y-4 overflow-y-auto"></div>
-            <nav class="absolute bottom-0 left-0 right-0 h-20 bg-white border-t flex items-center justify-around z-50">
-                <button onclick="showView('view-student-home')" class="text-blue-600 flex flex-col items-center">
-                    <span class="material-symbols-outlined">home</span><span class="text-[9px] font-bold">Inicio</span>
-                </button>
-                <button onclick="showView('view-community')" class="text-gray-300 flex flex-col items-center">
-                    <span class="material-symbols-outlined">groups</span><span class="text-[9px] font-bold">Comunidad</span>
-                </button>
-                <button onclick="showView('view-user-details')" class="text-gray-300 flex flex-col items-center">
-                    <span class="material-symbols-outlined">account_circle</span><span class="text-[9px] font-bold">Perfil</span>
-                </button>
+            <div id="books-container" class="scroll-area p-6 space-y-4"></div>
+            <nav>
+                <button onclick="showView('view-student-home')" class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-bold">Inicio</span></button>
+                <button onclick="showView('view-community')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button onclick="showView('view-user-details')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-bold">Perfil</span></button>
             </nav>
         </section>
 
-        <section id="view-community" class="view hidden flex-1 flex flex-col bg-gray-50 pb-20 overflow-hidden relative">
-            <header class="p-6 bg-white border-b sticky top-0 z-10">
-                <div class="flex items-center gap-4 mb-2">
-                    <button onclick="showView('view-student-home')"><span class="material-symbols-outlined text-gray-600">arrow_back</span></button>
-                    <h2 class="text-xl font-bold text-gray-900">Comunidad</h2>
+        <section id="view-community" class="view hidden">
+            <header class="p-6 bg-white border-b">
+                <div class="flex items-center gap-4 mb-4">
+                    <button onclick="showView('view-student-home')"><span class="material-symbols-outlined">arrow_back</span></button>
+                    <h2 class="text-xl font-bold">Comunidad</h2>
                 </div>
-                <div class="flex items-center bg-gray-100 px-4 py-2 rounded-2xl">
+                <div class="bg-gray-100 px-4 py-2 rounded-2xl flex items-center">
                     <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
-                    <input type="text" id="search-input" onkeyup="filterForum()" placeholder="Buscar consulta..." class="bg-transparent border-none outline-none text-sm ml-2 w-full">
+                    <input type="text" id="search-input" onkeyup="filterForum()" placeholder="Buscar consulta..." class="bg-transparent ml-2 w-full outline-none text-sm">
                 </div>
             </header>
+            <div id="forum-container" class="scroll-area p-6 space-y-4"></div>
             
-            <div id="forum-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-
-            <button id="btn-floating" onclick="openModal('modal-question')" class="fixed bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
+            <button id="btn-floating" onclick="openModal('modal-question')" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center">
                 <span class="material-symbols-outlined">add_comment</span>
             </button>
 
-            <nav class="absolute bottom-0 left-0 right-0 h-20 bg-white border-t flex items-center justify-around z-50">
-                <button onclick="showView('view-student-home')" class="text-gray-300 flex flex-col items-center">
-                    <span class="material-symbols-outlined">home</span><span class="text-[9px] font-bold">Inicio</span>
-                </button>
-                <button onclick="showView('view-community')" class="text-blue-600 flex flex-col items-center">
-                    <span class="material-symbols-outlined">groups</span><span class="text-[9px] font-bold">Comunidad</span>
-                </button>
-                <button onclick="showView('view-user-details')" class="text-gray-300 flex flex-col items-center">
-                    <span class="material-symbols-outlined">account_circle</span><span class="text-[9px] font-bold">Perfil</span>
-                </button>
+            <nav>
+                <button onclick="showView('view-student-home')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-bold">Inicio</span></button>
+                <button onclick="showView('view-community')" class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button onclick="showView('view-user-details')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-bold">Perfil</span></button>
             </nav>
         </section>
 
-        <div id="modal-question" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-6">
-            <div class="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-lg">Hacer una Consulta</h3>
-                    <button onclick="closeModal('modal-question')"><span class="material-symbols-outlined">close</span></button>
-                </div>
-                <textarea id="new-question-text" class="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl h-32 outline-none text-sm" placeholder="¿Qué quieres preguntar hoy?"></textarea>
-                <button onclick="postQuestion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Publicar en el Muro</button>
-            </div>
-        </div>
-
-        <section id="view-user-details" class="view hidden flex-1 flex flex-col bg-gray-50 pb-20">
-            <header class="p-6 bg-white flex items-center gap-4">
+        <section id="view-user-details" class="view hidden">
+            <header class="p-6 flex items-center gap-4 border-b">
                 <button onclick="showView('view-student-home')"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="font-bold">Mi Perfil</h2>
             </header>
-            <div class="p-8 flex flex-col items-center text-center space-y-4">
-                <div id="profile-img-detail" class="w-24 h-24 bg-blue-600 rounded-full border-4 border-white shadow-lg overflow-hidden flex items-center justify-center text-white text-3xl font-bold"></div>
+            <div class="scroll-area p-8 space-y-4 text-center">
+                <div id="profile-img-detail" class="w-24 h-24 bg-blue-600 rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold overflow-hidden"></div>
                 <h3 id="detail-name" class="text-xl font-bold"></h3>
+                <div class="bg-gray-50 p-4 rounded-2xl space-y-2 text-left">
+                    <div class="flex justify-between text-xs"><span class="text-gray-400 font-bold">CELULAR:</span><span id="detail-phone" class="font-bold"></span></div>
+                    <div class="flex justify-between text-xs"><span class="text-gray-400 font-bold">ROL:</span><span id="detail-role" class="text-blue-600 font-bold"></span></div>
+                </div>
+                <button onclick="logout()" class="w-full py-4 text-red-500 font-bold text-sm">Cerrar Sesión</button>
             </div>
-            <div class="px-6 space-y-3">
-                <div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email</span>
-                    <span id="detail-email" class="text-sm font-medium"></span>
-                </div>
-                <div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Celular</span>
-                    <span id="detail-phone" class="text-sm font-medium"></span>
-                </div>
-                <div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Rol</span>
-                    <span id="detail-role" class="text-sm font-bold text-blue-600"></span>
-                </div>
-            </div>
-            <button onclick="logout()" class="mx-8 mt-10 bg-red-50 text-red-600 py-4 rounded-2xl font-bold text-sm">Cerrar Sesión</button>
         </section>
 
+        <section id="view-chapter" class="view hidden">
+            <header class="p-6 flex items-center gap-4 border-b">
+                <button onclick="showView('view-student-home')"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h2 id="chapter-title" class="font-bold text-sm"></h2>
+            </header>
+            <div class="scroll-area p-8 space-y-6">
+                <h3 class="text-2xl font-bold text-blue-600">Lección 1</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Aquí va el contenido ministerial del Libro...</p>
+                <textarea class="w-full bg-gray-50 p-4 rounded-2xl h-32 outline-none text-sm" placeholder="Escribe tu reflexión..."></textarea>
+                <button onclick="alert('¡Enviado!')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Enviar al Maestro</button>
+            </div>
+        </section>
+
+        <div id="modal-question" class="hidden absolute inset-0 bg-black/60 z-[200] flex items-end">
+            <div class="bg-white w-full rounded-t-3xl p-8 space-y-4 animate-slide-up">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold">Nueva Consulta</h3>
+                    <button onclick="closeModal('modal-question')"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <textarea id="new-question-text" class="w-full bg-gray-100 p-4 rounded-2xl h-32 outline-none text-sm" placeholder="¿Qué duda tienes?"></textarea>
+                <button onclick="postQuestion()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Publicar</button>
+            </div>
+        </div>
+
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
