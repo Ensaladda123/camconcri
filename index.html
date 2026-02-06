@@ -1,129 +1,147 @@
-<section id="view-home-alumno" class="view hidden flex-1 flex flex-col fade-in">
-            <header class="p-6 flex items-center justify-between border-b">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Caminando con Cristo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lexend', sans-serif; background-color: #f3f4f6; }
+        .view { min-height: 100vh; background: white; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        input[type="file"] { display: none; }
+        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="flex justify-center">
+
+    <div id="app-container" class="w-full max-w-md bg-white min-h-screen shadow-2xl relative overflow-hidden flex flex-col">
+
+        <section id="view-home-alumno" class="view">
+            <header class="p-6 flex items-center justify-between border-b bg-white sticky top-0 z-10">
                 <div class="flex items-center gap-3">
-                    <div id="avatar-alumno" class="w-12 h-12 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-xl"></div>
+                    <div id="avatar-alumno" class="w-10 h-10 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold"></div>
                     <div>
-                        <p id="name-alumno" class="font-bold text-lg leading-none"></p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Alumno en formación</p>
+                        <p id="name-alumno" class="font-bold text-sm leading-none"></p>
+                        <p class="text-[10px] text-blue-500 font-bold uppercase mt-1">Alumno en formación</p>
                     </div>
                 </div>
-                <button onclick="cerrarSesion()" class="text-red-400"><span class="material-symbols-outlined">logout</span></button>
-            </header>
-
-            <div class="p-6 scroll-area flex-1 overflow-y-auto pb-24">
-                <h3 class="font-bold text-gray-800 mb-4 text-xl">Mis Libros</h3>
-                <div id="lista-libros" class="space-y-4">
-                    </div>
-
-                <div class="mt-12 bg-blue-50 p-6 rounded-3xl border border-blue-100">
-                    <p class="text-blue-600 font-bold text-xs uppercase mb-3">Palabras de Bendición</p>
-                    <div id="carousel-bendiciones" class="italic text-gray-600 text-sm">
-                        "¡Este curso cambió mi vida! Gracias a Dios por mis maestros."
-                    </div>
-                </div>
-            </div>
-
-            <nav class="absolute bottom-0 w-full h-20 bg-white border-t flex items-center justify-around">
-                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">auto_stories</span><span class="text-[10px] font-bold">Libros</span></button>
-                <button onclick="alert('Comunidad')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">forum</span><span class="text-[10px] font-bold">Comunidad</span></button>
-                <button onclick="alert('Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Mi Perfil</span></button>
-            </nav>
-        </section>
-
-        <section id="view-home-maestro" class="view hidden flex-1 flex flex-col fade-in">
-            <header class="p-6 flex items-center justify-between border-b bg-gray-50">
-                <div class="flex items-center gap-3">
-                    <div id="avatar-maestro" class="w-12 h-12 bg-orange-600 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-xl"></div>
-                    <div>
-                        <p id="name-maestro" class="font-bold text-lg leading-none"></p>
-                        <p class="text-[10px] text-orange-500 font-bold uppercase mt-1">Panel de Maestro</p>
-                    </div>
-                </div>
-                <button onclick="cerrarSesion()" class="text-red-400"><span class="material-symbols-outlined">logout</span></button>
+                <button onclick="cerrarSesion()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></button>
             </header>
 
             <div class="p-6 flex-1 overflow-y-auto pb-24">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="font-bold text-gray-800 text-xl">Alumnos Asignados</h3>
-                    <span class="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded-full">3 Alumnos</span>
-                </div>
-                
-                <div id="lista-alumnos" class="space-y-3">
-                    <div class="bg-white p-4 rounded-2xl border flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500">A</div>
-                            <div>
-                                <p class="font-bold text-sm">Alumno de Prueba 1</p>
-                                <p class="text-[10px] text-orange-500 font-bold">● PENDIENTE DE CORRECCIÓN</p>
-                            </div>
-                        </div>
-                        <button class="bg-blue-600 text-white text-[10px] font-bold px-3 py-2 rounded-lg">CORREGIR</button>
+                <h3 class="font-bold text-xl text-gray-800 mb-6">Mis Libros</h3>
+                <div id="lista-libros" class="space-y-4">
                     </div>
+
+                <div class="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-[2rem] border border-blue-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-blue-600 text-sm">auto_awesome</span>
+                        <p class="text-blue-600 font-bold text-[10px] uppercase tracking-wider">Bendiciones</p>
+                    </div>
+                    <p class="italic text-gray-600 text-sm leading-relaxed">"¡Este curso cambió mi vida! Gracias a Dios por mis maestros."</p>
                 </div>
             </div>
 
-            <nav class="absolute bottom-0 w-full h-20 bg-white border-t flex items-center justify-around">
-                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">dashboard</span><span class="text-[10px] font-bold">Nómina</span></button>
-                <button onclick="alert('Comunidad')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">forum</span><span class="text-[10px] font-bold">Comunidad</span></button>
-                <button onclick="alert('Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">manage_accounts</span><span class="text-[10px] font-bold">Perfil</span></button>
+            <nav class="absolute bottom-0 w-full h-20 bg-white/80 backdrop-blur-md border-t flex items-center justify-around z-20">
+                <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">auto_stories</span><span class="text-[10px] font-bold">Inicio</span></button>
+                <button onclick="mostrarComunidad()" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></button>
+                <button onclick="alert('Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-bold">Perfil</span></button>
             </nav>
         </section>
 
+        <section id="view-libro-detalle" class="view hidden">
+            <header class="p-6 flex items-center border-b bg-white sticky top-0 z-10">
+                <button onclick="volverAHome()" class="mr-4 text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
+                <div>
+                    <h3 id="detalle-libro-titulo" class="font-bold text-lg leading-none text-gray-800">Cargando...</h3>
+                    <p class="text-[10px] text-gray-400 font-bold mt-1 uppercase">Contenido del Libro</p>
+                </div>
+            </header>
+
+            <div class="p-6 flex-1 overflow-y-auto">
+                <div id="lista-capitulos" class="space-y-3">
+                    </div>
+            </div>
+        </section>
+
+        </div>
+
     <script>
-        // DATOS DE PRUEBA PARA LOS 6 LIBROS
-        const LIBROS_DATA = [
-            { id: 1, titulo: "Libro 1: Fundamentos", estado: "disponible", color: "bg-blue-600" },
-            { id: 2, titulo: "Libro 2: Oración", estado: "bloqueado", color: "bg-gray-300" },
-            { id: 3, titulo: "Libro 3: Palabra de Dios", estado: "bloqueado", color: "bg-gray-300" },
-            { id: 4, titulo: "Libro 4: El Espíritu Santo", estado: "bloqueado", color: "bg-gray-300" },
-            { id: 5, titulo: "Libro 5: La Iglesia", estado: "bloqueado", color: "bg-gray-300" },
-            { id: 6, titulo: "Libro 6: Evangelismo", estado: "bloqueado", color: "bg-gray-300" }
+        // CONFIGURACIÓN DE DATOS (Simulando lo que irá en Firebase)
+        const LIBROS = [
+            { id: 1, titulo: "Libro 1: Fundamentos de Fe", capitulos: 5, estado: "disponible" },
+            { id: 2, titulo: "Libro 2: Vida de Oración", capitulos: 4, estado: "bloqueado" },
+            { id: 3, titulo: "Libro 3: Carácter de Cristo", capitulos: 6, estado: "bloqueado" }
         ];
 
-        // Lógica de Registro (Mantenemos la anterior)
-        // ... (Todas las funciones validarRegistro, cargarFoto, elegirRol que ya tenías) ...
+        // DATOS DE USUARIO (Simulado de lo que guardamos en pasos anteriores)
+        let usuario = JSON.parse(localStorage.getItem('usuario_cristo_app')) || {
+            nombre: "Alumno",
+            rol: "alumno",
+            foto: null
+        };
 
-        function entrarApp() {
-            // Decidir a qué Home ir según el ROL
-            if(registro.rol === 'alumno') {
-                document.getElementById('view-setup').classList.add('hidden');
-                document.getElementById('view-home-alumno').classList.remove('hidden');
-                
-                document.getElementById('name-alumno').innerText = registro.nombre;
-                const avatar = document.getElementById('avatar-alumno');
-                if(registro.foto) avatar.innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
-                else avatar.innerText = registro.nombre[0].toUpperCase();
+        // INICIALIZACIÓN
+        window.onload = () => {
+            renderHomeAlumno();
+        };
 
-                renderLibros();
-            } else {
-                document.getElementById('view-setup').classList.add('hidden');
-                document.getElementById('view-home-maestro').classList.remove('hidden');
-                
-                document.getElementById('name-maestro').innerText = registro.nombre;
-                const avatar = document.getElementById('avatar-maestro');
-                if(registro.foto) avatar.innerHTML = `<img src="${registro.foto}" class="w-full h-full object-cover">`;
-                else avatar.innerText = registro.nombre[0].toUpperCase();
+        function renderHomeAlumno() {
+            document.getElementById('name-alumno').innerText = usuario.nombre;
+            const av = document.getElementById('avatar-alumno');
+            if(usuario.foto) av.innerHTML = `<img src="${usuario.foto}" class="w-full h-full object-cover">`;
+            else av.innerText = usuario.nombre[0];
+
+            const container = document.getElementById('lista-libros');
+            container.innerHTML = LIBROS.map(libro => `
+                <div onclick="abrirLibro(${libro.id})" class="bg-white p-4 rounded-3xl border border-gray-100 flex items-center gap-4 card-shadow active:scale-95 transition-all cursor-pointer ${libro.estado === 'bloqueado' ? 'opacity-60' : ''}">
+                    <div class="w-12 h-12 ${libro.estado === 'bloqueado' ? 'bg-gray-200' : 'bg-blue-600'} rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
+                        ${libro.estado === 'bloqueado' ? '<span class="material-symbols-outlined">lock</span>' : libro.id}
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800 text-sm leading-tight">${libro.titulo}</h4>
+                        <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase">${libro.capitulos} CAPÍTULOS</p>
+                    </div>
+                    <span class="material-symbols-outlined text-gray-300">chevron_right</span>
+                </div>
+            `).join('');
+        }
+
+        function abrirLibro(id) {
+            const libro = LIBROS.find(l => l.id === id);
+            if(libro.estado === 'bloqueado') return alert("Este libro estará disponible cuando termines el anterior.");
+
+            document.getElementById('view-home-alumno').classList.add('hidden');
+            document.getElementById('view-libro-detalle').classList.remove('hidden');
+            document.getElementById('detalle-libro-titulo').innerText = libro.titulo;
+
+            // Generar capítulos de prueba
+            const capContainer = document.getElementById('lista-capitulos');
+            capContainer.innerHTML = "";
+            for(let i = 1; i <= libro.capitulos; i++) {
+                capContainer.innerHTML += `
+                    <div onclick="alert('Abriendo Capítulo ${i}')" class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex justify-between items-center active:bg-gray-100">
+                        <div class="flex items-center gap-3">
+                            <span class="text-blue-600 font-bold text-sm">Capítulo ${i}</span>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-400 text-sm">play_circle</span>
+                    </div>
+                `;
             }
         }
 
-        function renderLibros() {
-            const container = document.getElementById('lista-libros');
-            container.innerHTML = LIBROS_DATA.map(libro => {
-                let statusIcon = libro.estado === 'bloqueado' ? 'lock' : (libro.estado === 'pendiente' ? 'schedule' : 'book');
-                let opacity = libro.estado === 'bloqueado' ? 'opacity-50' : 'active:scale-95';
-                
-                return `
-                    <div class="bg-white p-5 rounded-3xl border border-gray-100 flex items-center gap-4 shadow-sm transition-all ${opacity}">
-                        <div class="w-14 h-14 ${libro.color} rounded-2xl flex items-center justify-center text-white">
-                            <span class="material-symbols-outlined">${statusIcon}</span>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-gray-800">${libro.titulo}</h4>
-                            <p class="text-[10px] font-bold ${libro.estado === 'disponible' ? 'text-blue-500' : 'text-gray-400'} uppercase">${libro.estado}</p>
-                        </div>
-                        <span class="material-symbols-outlined text-gray-300">chevron_right</span>
-                    </div>
-                `;
-            }).join('');
+        function volverAHome() {
+            document.getElementById('view-libro-detalle').classList.add('hidden');
+            document.getElementById('view-home-alumno').classList.remove('hidden');
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('usuario_cristo_app');
+            location.reload();
         }
     </script>
+</body>
+</html>
