@@ -1,4 +1,3 @@
-// script.js actualizado
 let userData = {
     email: "",
     name: "",
@@ -11,7 +10,7 @@ let userData = {
 const BOOKS_DATA = [
     { id: 1, title: 'Libro 1: Fundamentos', chapters: 5, status: 'disponible', color: 'bg-blue-600' },
     { id: 2, title: 'Libro 2: La Oración', chapters: 4, status: 'bloqueado', color: 'bg-gray-400' },
-    { id: 3, title: 'Libro 3: Carácter', chapters: 6, status: 'bloqueado', color: 'bg-gray-400' },
+    { id: 3, title: 'Libro 3: Carácter', chapters: 6, status: 'bloqueado', color: 'bg-gray-400' }
 ];
 
 function showView(viewId) {
@@ -19,14 +18,12 @@ function showView(viewId) {
     document.getElementById(viewId).classList.remove('hidden');
 }
 
-// Lógica de Foto desde Galería
 function previewImage(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
             userData.photo = e.target.result;
-            const preview = document.getElementById('profile-preview');
-            preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            document.getElementById('profile-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
         }
         reader.readAsDataURL(input.files[0]);
     }
@@ -47,71 +44,43 @@ function setProfileRole(role) {
 }
 
 function finishSetup() {
-    // 1. Obtenemos los elementos
     const nameInput = document.getElementById('setup-name');
     const phoneInput = document.getElementById('setup-phone');
-    const maestroSelect = document.getElementById('select-maestro');
-    const maestroCodeInput = document.getElementById('maestro-code');
-
-    // 2. Validamos que existan en el HTML
-    if (!nameInput || !phoneInput) {
-        console.error("No se encuentran los campos de texto");
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
     
-    // 3. Validaciones de lógica
-    if (!name || !phone || !userData.role) {
-        alert("⚠️ Por favor completa tu nombre, celular y selecciona un rol.");
+    if (!nameInput.value || !phoneInput.value || !userData.role) {
+        alert("⚠️ Completa Nombre, Celular y Rol");
         return;
     }
 
     if (userData.role === 'maestro') {
-        const code = maestroCodeInput.value;
-        if (code !== "1234") {
-            alert("❌ Código Ministerial Incorrecto");
+        if (document.getElementById('maestro-code').value !== "1234") {
+            alert("❌ Código incorrecto");
             return;
         }
-    } else {
-        const maestro = maestroSelect.value;
-        if (!maestro) {
-            alert("⚠️ Debes elegir un maestro para continuar.");
-            return;
-        }
-        userData.maestro = maestro;
+    } else if (!document.getElementById('select-maestro').value) {
+        alert("⚠️ Selecciona un maestro");
+        return;
     }
 
-    // 4. Guardamos los datos
-    userData.name = name;
-    userData.phone = phone;
+    userData.name = nameInput.value;
+    userData.phone = phoneInput.value;
+    userData.maestro = document.getElementById('select-maestro').value;
 
-    // 5. Actualizamos la cara de la app y entramos
-    updateProfileUI();
-
+    updateUI();
+    
     if (userData.role === 'alumno') {
         renderBooks();
         showView('view-student-home');
     } else {
-        // Por ahora, si es maestro, lo mandamos al panel que ya tenías
-        renderStudents(); // Esta función debe existir para cargar la lista
-        showView('view-teacher-panel');
+        alert("Panel Maestro en construcción");
     }
 }
 
-function updateProfileUI() {
-    const avatarHome = document.getElementById('user-avatar-home');
-    const avatarDetail = document.getElementById('profile-img-detail');
+function updateUI() {
+    const content = userData.photo ? `<img src="${userData.photo}" class="w-full h-full object-cover">` : `<span class="text-white">${userData.name[0]}</span>`;
     
-    // Si no hay foto, ponemos la inicial
-    const content = userData.photo ? 
-        `<img src="${userData.photo}" class="w-full h-full object-cover">` : 
-        `<span class="text-white">${userData.name.charAt(0).toUpperCase()}</span>`;
-    
-    if(avatarHome) avatarHome.innerHTML = content;
-    if(avatarDetail) avatarDetail.innerHTML = content;
-
+    document.getElementById('user-avatar-home').innerHTML = content;
+    document.getElementById('profile-img-detail').innerHTML = content;
     document.getElementById('display-name').innerText = userData.name;
     document.getElementById('detail-name').innerText = userData.name;
     document.getElementById('detail-email').innerText = userData.email;
@@ -122,30 +91,13 @@ function updateProfileUI() {
 function renderBooks() {
     const container = document.getElementById('books-container');
     container.innerHTML = BOOKS_DATA.map(book => `
-        <div onclick="${book.status === 'disponible' ? `openBook('${book.title}')` : `alert('Libro bloqueado hasta corregir el anterior')`}" 
-             class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 active:scale-95 transition-all cursor-pointer">
-            <div class="w-12 h-12 ${book.color} rounded-2xl flex items-center justify-center text-white">
-                <span class="material-symbols-outlined text-sm">${book.status === 'bloqueado' ? 'lock' : 'book_2'}</span>
-            </div>
-            <div class="flex-1">
-                <h4 class="font-bold text-gray-900 text-sm">${book.title}</h4>
-                <p class="text-[9px] font-bold text-gray-400 uppercase">${book.chapters} Capítulos</p>
-            </div>
+        <div onclick="${book.status === 'disponible' ? `alert('Cargando lectura...')` : `alert('Bloqueado')`}" 
+             class="bg-white p-4 rounded-3xl shadow-sm border flex items-center gap-4">
+            <div class="w-12 h-12 ${book.color} rounded-2xl flex items-center justify-center text-white italic font-bold">L${book.id}</div>
+            <div class="flex-1 text-sm font-bold">${book.title}</div>
             <span class="material-symbols-outlined text-gray-300">chevron_right</span>
         </div>
     `).join('');
 }
 
-function openBook(title) {
-    document.getElementById('chapter-title').innerText = title;
-    showView('view-chapter');
-}
-
-function submitLesson() {
-    alert("¡Tarea enviada a " + userData.maestro + "!");
-    showView('view-student-home');
-}
-
-function logout() {
-    location.reload();
-}
+function logout() { location.reload(); }
