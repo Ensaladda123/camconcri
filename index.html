@@ -7,12 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        .view { min-height: 100vh; }
+        .hidden { display: none !important; }
+        #user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    </style>
 </head>
 <body class="bg-gray-200 font-['Lexend'] antialiased">
     <div id="app-container" class="mx-auto max-w-md min-h-screen bg-white shadow-2xl overflow-hidden flex flex-col relative">
         
-        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center min-h-screen space-y-8">
+        <section id="view-auth" class="view p-8 flex flex-col items-center justify-center space-y-8">
             <div class="text-center">
                 <span class="material-symbols-outlined text-blue-600 text-6xl">account_circle</span>
                 <h1 class="text-2xl font-bold mt-4">Crear Cuenta</h1>
@@ -20,29 +24,36 @@
             </div>
             
             <div class="w-full space-y-4">
-                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 border-2 border-gray-100 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all">
+                <button onclick="goToProfileSocial('Google')" class="w-full flex items-center justify-center gap-3 border-2 border-gray-100 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all">
                     <img src="https://www.google.com/favicon.ico" class="w-5"> Continuar con Google
                 </button>
-                <button onclick="goToProfile()" class="w-full flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-bold">
+                <button onclick="goToProfileSocial('Apple')" class="w-full flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-bold">
                     <span class="material-symbols-outlined">apple</span> Continuar con Apple
                 </button>
                 <div class="text-center text-gray-400 text-xs py-2 uppercase font-bold tracking-widest">o</div>
-                <input type="email" placeholder="Correo electrónico" class="w-full bg-gray-50 border-none p-4 rounded-2xl">
-                <button onclick="goToProfile()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Registrarse Manualmente</button>
+                
+                <input type="email" id="auth-email" placeholder="Correo electrónico" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-100 p-4 rounded-2xl outline-none">
+                <button onclick="validateAndGo()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg">Registrarse Manualmente</button>
             </div>
         </section>
 
         <section id="view-profile-setup" class="view hidden p-8 flex flex-col space-y-6">
-            <h2 class="text-2xl font-bold">Completa tu Perfil</h2>
+            <div class="flex items-center gap-2">
+                <button onclick="showView('view-auth')" class="text-gray-400"><span class="material-symbols-outlined">arrow_back</span></button>
+                <h2 class="text-2xl font-bold">Completa tu Perfil</h2>
+            </div>
             
             <div class="flex flex-col items-center space-y-4">
-                <div onclick="alert('Aquí se abriría la cámara')" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer">
-                    <span class="material-symbols-outlined text-gray-400">add_a_photo</span>
-                </div>
+                <label for="input-photo" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 cursor-pointer overflow-hidden relative">
+                    <div id="preview-container" class="flex items-center justify-center w-full h-full">
+                        <span class="material-symbols-outlined text-gray-400">add_a_photo</span>
+                    </div>
+                    <input type="file" id="input-photo" accept="image/*" class="hidden" onchange="handlePhoto(this)">
+                </label>
                 <p class="text-xs font-bold text-blue-600">Subir foto de perfil</p>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 overflow-y-auto">
                 <input type="text" id="setup-name" placeholder="Nombre Completo *" class="w-full bg-gray-50 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-100">
                 <input type="tel" id="setup-phone" placeholder="Celular (WhatsApp) *" class="w-full bg-gray-50 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-100">
                 
@@ -52,15 +63,15 @@
                     <button onclick="setProfileRole('maestro')" id="btn-role-maestro" class="p-4 border-2 border-gray-100 rounded-2xl font-bold">Soy Maestro</button>
                 </div>
 
-                <div id="setup-alumno-extra" class="hidden animate-fade-in">
-                    <select id="select-maestro" class="w-full bg-gray-50 p-4 rounded-2xl outline-none">
+                <div id="setup-alumno-extra" class="hidden">
+                    <select id="select-maestro" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border-2 border-transparent">
                         <option value="">Elegir mi Maestro...</option>
-                        <option value="1">Pastor Juan Carlos</option>
-                        <option value="2">Maestra María</option>
+                        <option value="Pastor Juan Carlos">Pastor Juan Carlos</option>
+                        <option value="Maestra María">Maestra María</option>
                     </select>
                 </div>
 
-                <div id="setup-maestro-extra" class="hidden animate-fade-in">
+                <div id="setup-maestro-extra" class="hidden">
                     <input type="password" id="maestro-code" placeholder="Código Ministerial (1234)" class="w-full bg-gray-50 p-4 rounded-2xl outline-none border-2 border-blue-50">
                 </div>
             </div>
@@ -71,25 +82,24 @@
         <section id="view-student-home" class="view hidden flex-1 flex flex-col">
             <header class="p-6 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div id="user-avatar" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">D</div>
+                    <div id="user-avatar" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl overflow-hidden">
+                        </div>
                     <div>
-                        <p id="display-name" class="text-lg font-bold">Daniel</p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Alumno en formación</p>
+                        <p id="display-name" class="text-lg font-bold"></p>
+                        <p id="display-role-label" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest"></p>
                     </div>
                 </div>
                 <button onclick="logout()" class="text-red-500"><span class="material-symbols-outlined">logout</span></button>
             </header>
             
-            <div id="books-container" class="p-6 space-y-4 overflow-y-auto pb-24">
-                </div>
+            <div id="books-container" class="p-6 space-y-4 overflow-y-auto pb-24"></div>
 
             <nav class="absolute bottom-0 left-0 right-0 h-20 bg-white border-t flex items-center justify-around">
                 <button class="text-blue-600 flex flex-col items-center"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-bold">Inicio</span></button>
                 <button onclick="alert('Próximamente')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">groups</span><span class="text-[10px] font-bold">Comunidad</span></button>
-                <button onclick="alert('Mi Perfil')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Perfil</span></button>
+                <button onclick="showView('view-profile-setup')" class="text-gray-300 flex flex-col items-center"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-bold">Perfil</span></button>
             </nav>
         </section>
-
     </div>
     <script src="script.js"></script>
 </body>
