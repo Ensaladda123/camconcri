@@ -47,46 +47,76 @@ function setProfileRole(role) {
 }
 
 function finishSetup() {
-    const name = document.getElementById('setup-name').value;
-    const phone = document.getElementById('setup-phone').value;
-    
-    if (!name || !phone || !userData.role) {
-        alert("Completa los campos obligatorios");
+    // 1. Obtenemos los elementos
+    const nameInput = document.getElementById('setup-name');
+    const phoneInput = document.getElementById('setup-phone');
+    const maestroSelect = document.getElementById('select-maestro');
+    const maestroCodeInput = document.getElementById('maestro-code');
+
+    // 2. Validamos que existan en el HTML
+    if (!nameInput || !phoneInput) {
+        console.error("No se encuentran los campos de texto");
         return;
     }
 
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    
+    // 3. Validaciones de lógica
+    if (!name || !phone || !userData.role) {
+        alert("⚠️ Por favor completa tu nombre, celular y selecciona un rol.");
+        return;
+    }
+
+    if (userData.role === 'maestro') {
+        const code = maestroCodeInput.value;
+        if (code !== "1234") {
+            alert("❌ Código Ministerial Incorrecto");
+            return;
+        }
+    } else {
+        const maestro = maestroSelect.value;
+        if (!maestro) {
+            alert("⚠️ Debes elegir un maestro para continuar.");
+            return;
+        }
+        userData.maestro = maestro;
+    }
+
+    // 4. Guardamos los datos
     userData.name = name;
     userData.phone = phone;
-    userData.maestro = document.getElementById('select-maestro').value;
 
-    // Actualizar UI del Perfil y Home
+    // 5. Actualizamos la cara de la app y entramos
     updateProfileUI();
 
     if (userData.role === 'alumno') {
         renderBooks();
         showView('view-student-home');
     } else {
-        alert("¡Bienvenido Maestro!");
+        // Por ahora, si es maestro, lo mandamos al panel que ya tenías
+        renderStudents(); // Esta función debe existir para cargar la lista
+        showView('view-teacher-panel');
     }
 }
 
 function updateProfileUI() {
-    // Foto en Home y Detalles
     const avatarHome = document.getElementById('user-avatar-home');
     const avatarDetail = document.getElementById('profile-img-detail');
     
-    const content = userData.photo ? `<img src="${userData.photo}" class="w-full h-full object-cover">` : userData.name.charAt(0);
-    avatarHome.innerHTML = content;
-    avatarDetail.innerHTML = content;
+    // Si no hay foto, ponemos la inicial
+    const content = userData.photo ? 
+        `<img src="${userData.photo}" class="w-full h-full object-cover">` : 
+        `<span class="text-white">${userData.name.charAt(0).toUpperCase()}</span>`;
+    
+    if(avatarHome) avatarHome.innerHTML = content;
+    if(avatarDetail) avatarDetail.innerHTML = content;
 
-    // Textos
     document.getElementById('display-name').innerText = userData.name;
     document.getElementById('detail-name').innerText = userData.name;
     document.getElementById('detail-email').innerText = userData.email;
     document.getElementById('detail-phone').innerText = userData.phone;
     document.getElementById('detail-role').innerText = userData.role;
-    document.getElementById('detail-maestro').innerText = userData.maestro || "N/A";
-    document.getElementById('detail-maestro-row').classList.toggle('hidden', userData.role !== 'alumno');
 }
 
 function renderBooks() {
